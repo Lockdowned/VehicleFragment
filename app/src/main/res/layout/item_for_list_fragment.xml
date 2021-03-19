@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/imageVehicleItem"
+        android:layout_width="207dp"
+        android:layout_height="141dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/for_attachment_picture"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/default_car" />
+
+    <TextView
+        android:id="@+id/textBrandsandModelItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:hint="@string/car_brand_and_model"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/imageVehicleItem"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textSpecificationItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/specification"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/textBrandsandModelItem"
+        app:layout_constraintTop_toBottomOf="@+id/textBrandsandModelItem" />
+
+    <TextView
+        android:id="@+id/textServInfItem"
+        android:layout_width="166dp"
+        android:layout_height="77dp"
+        android:layout_marginTop="8dp"
+        android:hint="@string/service_information"
+        app:layout_constraintStart_toStartOf="@+id/textSpecificationItem"
+        app:layout_constraintTop_toBottomOf="@+id/textSpecificationItem" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

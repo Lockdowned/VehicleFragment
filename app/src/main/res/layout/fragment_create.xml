@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".fragments.CreateFragment">
+
+    <ImageView
+        android:id="@+id/imageCreateNewVehicle"
+        android:layout_width="221dp"
+        android:layout_height="169dp"
+        android:layout_marginStart="8dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toStartOf="@+id/constraintLayout"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/default_car" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/constraintLayout"
+    android:layout_width="0dp"
+    android:layout_height="169dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.5"
+    app:layout_constraintStart_toEndOf="@+id/imageCreateNewVehicle"
+    app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/editTextYearRel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:hint="@string/years_of_release"
+            android:inputType="number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextModel" />
+
+        <EditText
+            android:id="@+id/editTextModel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:hint="@string/model"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextBrand" />
+
+        <EditText
+            android:id="@+id/editTextBrand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:hint="@string/brand"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+    android:id="@+id/textView5"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:text="@string/specification"
+    android:textSize="18sp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/imageCreateNewVehicle" />
+
+    <TextView
+    android:id="@+id/textView6"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="80dp"
+    android:text="@string/engine"
+    android:textSize="18sp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <RadioGroup
+    android:id="@+id/radioGroupEngine"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="24dp"
+    app:layout_constraintBottom_toBottomOf="@+id/textView6"
+    app:layout_constraintStart_toEndOf="@+id/textView6"
+    app:layout_constraintTop_toTopOf="@+id/textView6">
+
+        <RadioButton
+            android:id="@+id/radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/petrol" />
+
+        <RadioButton
+            android:id="@+id/radioButton3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/diesel" />
+
+        <RadioButton
+            android:id="@+id/radioButtonElectricEngine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/electric" />
+    </RadioGroup>
+
+    <TextView
+    android:id="@+id/textView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:text="@string/gearbox"
+    android:textSize="18sp"
+    app:layout_constraintBottom_toTopOf="@+id/radioGroupGear"
+    app:layout_constraintEnd_toEndOf="@+id/radioGroupGear"
+    app:layout_constraintStart_toStartOf="@+id/radioGroupGear" />
+
+    <RadioGroup
+    android:id="@+id/radioGroupGear"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="50dp"
+    android:orientation="horizontal"
+    app:layout_constraintBottom_toBottomOf="@+id/textView6"
+    app:layout_constraintStart_toEndOf="@+id/radioGroupEngine"
+    app:layout_constraintTop_toTopOf="@+id/textView6">
+
+        <RadioButton
+            android:id="@+id/radioButton4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/stick" />
+
+        <RadioButton
+            android:id="@+id/radioButton6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auto" />
+
+    </RadioGroup>
+
+    <EditText
+    android:id="@+id/editTextEngineDisplacement"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="88dp"
+    android:hint="@string/engine_displacement_ml"
+    android:inputType="number"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <EditText
+    android:id="@+id/editTextPowerCreate"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:enabled="false"
+    android:hint="@string/power"
+    android:inputType="number"
+    app:layout_constraintStart_toStartOf="@+id/editTextEngineDisplacement"
+    app:layout_constraintTop_toBottomOf="@+id/editTextEngineDisplacement" />
+
+    <Button
+    android:id="@+id/btnSaveOnCreateAct"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="32dp"
+    android:text="@string/save"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/editTextPowerCreate" />
+
+    <TextView
+    android:id="@+id/textViewMeasuringМalues"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:textSize="18sp"
+    app:layout_constraintBaseline_toBaselineOf="@+id/editTextPowerCreate"
+    app:layout_constraintStart_toEndOf="@+id/editTextPowerCreate" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

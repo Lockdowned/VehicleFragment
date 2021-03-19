@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/miList"
+        android:title="List"
+        android:icon="@drawable/ic_list_foreground"/>
+
+    <item
+        android:id="@+id/miCreate"
+        android:title="Create"
+        android:icon="@drawable/ic_create_foreground"/>
+
+    <item
+        android:id="@+id/miEdit"
+        android:title="Edit"
+        android:icon="@drawable/ic_edit_foreground"/>
+
+</menu>
