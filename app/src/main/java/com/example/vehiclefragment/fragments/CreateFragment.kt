@@ -18,7 +18,7 @@ import com.example.vehiclefragment.data.VehicleItem
 import com.example.vehiclefragment.databinding.FragmentCreateBinding
 import com.example.vehiclefragment.interfaces.IVehicleCreateListener
 
-class CreateFragment : Fragment() {
+class CreateFragment : Fragment(R.layout.fragment_create) {
 
     private var _binding: FragmentCreateBinding? = null
     private val binding get() = _binding!!
@@ -29,14 +29,9 @@ class CreateFragment : Fragment() {
 
     private lateinit var newVehicle: VehicleItem
 
-    private lateinit var mainListener: IVehicleCreateListener
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         localContext = context
-        if (context is IVehicleCreateListener){
-            mainListener = context
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -74,10 +69,10 @@ class CreateFragment : Fragment() {
                 newVehicle = VehicleItem(AppCompatResources.getDrawable(localContext,
                     R.drawable.default_car), textBrandAndModel, "", "")
                 Log.d(newVehicle.toString(), "MyLogNewVeh")
-//                newVehicle.let {
-//                    (localContext as MainActivity).deliverCreatedVehicle(newVehicle)
-//                }
-                mainListener.deliverCreatedVehicle(newVehicle)
+                newVehicle.let {
+                    (localContext as IVehicleCreateListener).deliverCreatedVehicle(newVehicle)
+                }
+
             }
 
         }

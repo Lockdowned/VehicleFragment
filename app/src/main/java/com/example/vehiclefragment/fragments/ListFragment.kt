@@ -2,7 +2,6 @@ package com.example.vehiclefragment.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,13 +13,15 @@ import com.example.vehiclefragment.R
 import com.example.vehiclefragment.adaptor.VehicleListAdaptor
 import com.example.vehiclefragment.data.VehicleItem
 import com.example.vehiclefragment.helperObject.InitHelp
+import com.example.vehiclefragment.interfaces.IVehicleEditListener
 
 class ListFragment : Fragment(R.layout.fragment_list) {
 
     private lateinit var localContext: Context
 
     private lateinit var vehicleList: MutableList<VehicleItem>
-    private lateinit var vehicleAdapter: VehicleListAdaptor
+    private var vehicleAdapter: VehicleListAdaptor? = null
+    private lateinit var fragment: RecyclerView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -37,18 +38,20 @@ class ListFragment : Fragment(R.layout.fragment_list) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        vehicleList = InitHelp.initialize(localContext)
-        vehicleAdapter = VehicleListAdaptor(vehicleList)
 
-        val fragment = view.findViewById<RecyclerView>(R.id.rvListFragment)
+        if (vehicleAdapter == null){
+            vehicleList = InitHelp.initialize(localContext)
+            vehicleAdapter = VehicleListAdaptor(vehicleList, localContext as IVehicleEditListener)
+        }
+        
+        fragment = view.findViewById<RecyclerView>(R.id.rvListFragment)
         fragment.adapter = vehicleAdapter
         fragment.layoutManager = LinearLayoutManager(localContext)
     }
 
     fun addNewVehicleItem(vehicleItem: VehicleItem){
         vehicleList.add(vehicleItem)
-//        vehicleAdapter.notifyItemInserted(vehicleList.size - 1)
-        vehicleAdapter.notifyDataSetChanged()
+        vehicleAdapter?.notifyItemInserted(vehicleList.size - 1)
     }
 
 
