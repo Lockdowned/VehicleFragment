@@ -3,14 +3,18 @@ package com.example.vehiclefragment
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.example.vehiclefragment.data.VehicleItem
 import com.example.vehiclefragment.databinding.ActivityMainBinding
 import com.example.vehiclefragment.fragments.CreateFragment
+import com.example.vehiclefragment.fragments.EditFragment
 import com.example.vehiclefragment.fragments.ListFragment
+import com.example.vehiclefragment.interfaces.IVehicleCreateListener
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), IVehicleCreateListener {
 
     private lateinit var listFragment: ListFragment
     private lateinit var createFragment: CreateFragment
+    private lateinit var editFragment: EditFragment
 
     private lateinit var binding: ActivityMainBinding
 
@@ -22,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         listFragment = ListFragment()
         createFragment = CreateFragment()
+        editFragment = EditFragment()
         setCurrentFragment(listFragment)
 
 
@@ -30,7 +35,7 @@ class MainActivity : AppCompatActivity() {
             when(it.itemId){
                 R.id.miList -> setCurrentFragment(listFragment)
                 R.id.miCreate -> setCurrentFragment(createFragment)
-//                R.id.miEdit ->
+                R.id.miEdit -> setCurrentFragment(editFragment)
             }
             true
         }
@@ -44,5 +49,10 @@ class MainActivity : AppCompatActivity() {
             replace(R.id.mainFragment, fragment)
             commit()
         }
+    }
+
+    override fun deliverCreatedVehicle(vehicleItem: VehicleItem) {
+        binding.mainMenu.selectedItemId = R.id.miList
+        listFragment.addNewVehicleItem(vehicleItem)
     }
 }

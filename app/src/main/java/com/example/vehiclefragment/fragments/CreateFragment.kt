@@ -10,11 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.toDrawable
 import com.example.vehiclefragment.MainActivity
 import com.example.vehiclefragment.R
 import com.example.vehiclefragment.data.VehicleItem
 import com.example.vehiclefragment.databinding.FragmentCreateBinding
+import com.example.vehiclefragment.interfaces.IVehicleCreateListener
 
 class CreateFragment : Fragment() {
 
@@ -27,9 +29,14 @@ class CreateFragment : Fragment() {
 
     private lateinit var newVehicle: VehicleItem
 
+    private lateinit var mainListener: IVehicleCreateListener
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         localContext = context
+        if (context is IVehicleCreateListener){
+            mainListener = context
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -41,6 +48,7 @@ class CreateFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.run {
+
             imageCreateNewVehicle.setOnClickListener {
                 val intent = Intent(Intent.ACTION_PICK)
                 intent.type = "image/*"
@@ -48,9 +56,9 @@ class CreateFragment : Fragment() {
             }
 
             btnSaveOnCreateAct.setOnClickListener {
-                if ((editTextBrand.text.toString() == "")
-                        || (editTextModel.text.toString() == "")
-                        || (editTextYearRel.text.toString() == "")) {
+                if ((editTextBrand.text.toString().isEmpty())
+                        || (editTextModel.text.toString().isEmpty())
+                        || (editTextYearRel.text.toString().isEmpty())) {
                     Toast.makeText(localContext, "Please fill in the lines marked *",
                             Toast.LENGTH_LONG).show()
                     return@setOnClickListener
@@ -63,14 +71,13 @@ class CreateFragment : Fragment() {
                 val textBrandAndModel = "${editTextBrand.text.toString()} " +
                         "${editTextModel.text.toString()} ${editTextYearRel.text.toString()}"
 
-
-
-
-                newVehicle = VehicleItem(R.drawable.default_car.toDrawable(), textBrandAndModel, "", "")
-//                newVehicle?.let {
-//                    Log.d("VehicleAddFragment", it.toString())
-//                    mListener.onVehicleCreated(newVehicle)
+                newVehicle = VehicleItem(AppCompatResources.getDrawable(localContext,
+                    R.drawable.default_car), textBrandAndModel, "", "")
+                Log.d(newVehicle.toString(), "MyLogNewVeh")
+//                newVehicle.let {
+//                    (localContext as MainActivity).deliverCreatedVehicle(newVehicle)
 //                }
+                mainListener.deliverCreatedVehicle(newVehicle)
             }
 
         }

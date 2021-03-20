@@ -6,7 +6,7 @@ import com.example.vehiclefragment.R
 import com.example.vehiclefragment.data.VehicleItem
 
 object InitHelp {
-    fun initialize(context: Context): List<VehicleItem>{
+    fun initialize(context: Context): MutableList<VehicleItem>{
         return mutableListOf(
             VehicleItem(
                 AppCompatResources.getDrawable(context, R.drawable.mini_cooper_angularfront),
