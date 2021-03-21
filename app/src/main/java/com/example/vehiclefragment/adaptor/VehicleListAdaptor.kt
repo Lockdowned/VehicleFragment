@@ -1,17 +1,13 @@
 package com.example.vehiclefragment.adaptor
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.vehiclefragment.MainActivity
-import com.example.vehiclefragment.R
 import com.example.vehiclefragment.data.VehicleItem
 import com.example.vehiclefragment.databinding.ItemForListFragmentBinding
-import com.example.vehiclefragment.interfaces.IVehicleCreateListener
-import com.example.vehiclefragment.interfaces.IVehicleEditListener
+import com.example.vehiclefragment.interfaces.IVehicleToEditListener
 
-class VehicleListAdaptor(private val vehicleList: List<VehicleItem>, private val context: IVehicleEditListener):
+class VehicleListAdaptor(private val vehicleList: List<VehicleItem>, private val context: IVehicleToEditListener):
     RecyclerView.Adapter<VehicleListAdaptor.VehicleViewHolder>(){
 
     inner class VehicleViewHolder(val itemForListFragmentBinding: ItemForListFragmentBinding):

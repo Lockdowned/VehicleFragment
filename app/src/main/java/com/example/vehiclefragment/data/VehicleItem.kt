@@ -3,8 +3,9 @@ package com.example.vehiclefragment.data
 import android.graphics.drawable.Drawable
 
 data class VehicleItem(
-    val img: Drawable?,
-    val brandAndModel: String,
-    val specification: String,
-    var serviceInfo: String
+        var img: Drawable?,
+        var brandAndModel: String,
+        var specification: String,
+        var serviceInfo: String,
+        var uriString: String?
 )

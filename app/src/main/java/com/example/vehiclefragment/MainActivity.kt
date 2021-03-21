@@ -1,6 +1,7 @@
 package com.example.vehiclefragment
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.vehiclefragment.data.VehicleItem
@@ -8,16 +9,20 @@ import com.example.vehiclefragment.databinding.ActivityMainBinding
 import com.example.vehiclefragment.fragments.CreateFragment
 import com.example.vehiclefragment.fragments.EditFragment
 import com.example.vehiclefragment.fragments.ListFragment
-import com.example.vehiclefragment.interfaces.IVehicleCreateListener
-import com.example.vehiclefragment.interfaces.IVehicleEditListener
+import com.example.vehiclefragment.interfaces.IUpdateListListener
+import com.example.vehiclefragment.interfaces.IVehicleCreatedVehicleListener
+import com.example.vehiclefragment.interfaces.IVehicleToEditListener
 
-class MainActivity : AppCompatActivity(), IVehicleCreateListener, IVehicleEditListener {
+class MainActivity : AppCompatActivity(), IVehicleCreatedVehicleListener, IVehicleToEditListener,
+IUpdateListListener{
 
     private lateinit var listFragment: ListFragment
     private lateinit var createFragment: CreateFragment
     private lateinit var editFragment: EditFragment
 
     private lateinit var binding: ActivityMainBinding
+
+    private var itemVehicleToEdit: VehicleItem? = null
 
 
     
@@ -46,8 +51,18 @@ class MainActivity : AppCompatActivity(), IVehicleCreateListener, IVehicleEditLi
         binding.mainMenu.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.miList -> setCurrentFragment(listFragment)
-                R.id.miCreate -> setCurrentFragment(createFragment)
-                R.id.miEdit -> setCurrentFragment(editFragment)
+                R.id.miCreate -> {
+                    createFragment = CreateFragment()
+                    setCurrentFragment(createFragment)
+                }
+                R.id.miEdit -> {
+                    itemVehicleToEdit?.let {
+                        setCurrentFragment(editFragment)
+                        return@setOnNavigationItemSelectedListener true
+                    }
+                    Toast.makeText(this,
+                            "Fellow, need choose vehicle", Toast.LENGTH_SHORT).show()
+                }
             }
             true
         }
@@ -63,14 +78,20 @@ class MainActivity : AppCompatActivity(), IVehicleCreateListener, IVehicleEditLi
         }
     }
 
-    override fun deliverCreatedVehicle(vehicleItem: VehicleItem) {
+    override fun deliverVehicle(vehicleItem: VehicleItem) {
         binding.mainMenu.selectedItemId = R.id.miList
         listFragment.addNewVehicleItem(vehicleItem)
     }
 
     override fun itemToEdit(item: VehicleItem) {
+        itemVehicleToEdit = item
         editFragment.fillEditView(item)
         binding.mainMenu.selectedItemId = R.id.miEdit
+    }
+
+    override fun updateListFragment() {
+        listFragment.updateVehicleItems()
+        binding.mainMenu.selectedItemId = R.id.miList
     }
 
 

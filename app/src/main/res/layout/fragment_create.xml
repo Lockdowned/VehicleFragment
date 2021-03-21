@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_marginTop="8dp"
-    tools:context=".fragments.CreateFragment"
-    android:background="@color/white">
+    tools:context=".fragments.CreateFragment">
 
     <ImageView
         android:id="@+id/imageCreateNewVehicle"
         android:layout_width="221dp"
         android:layout_height="169dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toStartOf="@+id/constraintLayout"
         app:layout_constraintHorizontal_bias="0.5"
@@ -21,13 +20,14 @@
         app:srcCompat="@drawable/default_car" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/constraintLayout"
-    android:layout_width="0dp"
-    android:layout_height="169dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.5"
-    app:layout_constraintStart_toEndOf="@+id/imageCreateNewVehicle"
-    app:layout_constraintTop_toTopOf="parent">
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="169dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageCreateNewVehicle"
+        app:layout_constraintTop_toTopOf="parent">
 
         <EditText
             android:id="@+id/editTextYearRel"
@@ -36,7 +36,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:hint="@string/years_of_release"
-            android:inputType="number"
+            android:inputType="date"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextModel" />
 
@@ -64,35 +64,35 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-    android:id="@+id/textView5"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:text="@string/specification"
-    android:textSize="18sp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/imageCreateNewVehicle" />
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/specification"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageCreateNewVehicle" />
 
     <TextView
-    android:id="@+id/textView6"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="80dp"
-    android:text="@string/engine"
-    android:textSize="18sp"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="80dp"
+        android:text="@string/engine"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <RadioGroup
-    android:id="@+id/radioGroupEngine"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="24dp"
-    app:layout_constraintBottom_toBottomOf="@+id/textView6"
-    app:layout_constraintStart_toEndOf="@+id/textView6"
-    app:layout_constraintTop_toTopOf="@+id/textView6">
+        android:id="@+id/radioGroupEngine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView6"
+        app:layout_constraintStart_toEndOf="@+id/textView6"
+        app:layout_constraintTop_toTopOf="@+id/textView6">
 
         <RadioButton
             android:id="@+id/radioButton"
@@ -114,25 +114,25 @@
     </RadioGroup>
 
     <TextView
-    android:id="@+id/textView"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp"
-    android:text="@string/gearbox"
-    android:textSize="18sp"
-    app:layout_constraintBottom_toTopOf="@+id/radioGroupGear"
-    app:layout_constraintEnd_toEndOf="@+id/radioGroupGear"
-    app:layout_constraintStart_toStartOf="@+id/radioGroupGear" />
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/gearbox"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/radioGroupGear"
+        app:layout_constraintEnd_toEndOf="@+id/radioGroupGear"
+        app:layout_constraintStart_toStartOf="@+id/radioGroupGear" />
 
     <RadioGroup
-    android:id="@+id/radioGroupGear"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="50dp"
-    android:orientation="horizontal"
-    app:layout_constraintBottom_toBottomOf="@+id/textView6"
-    app:layout_constraintStart_toEndOf="@+id/radioGroupEngine"
-    app:layout_constraintTop_toTopOf="@+id/textView6">
+        android:id="@+id/radioGroupGear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/textView6"
+        app:layout_constraintStart_toEndOf="@+id/radioGroupEngine"
+        app:layout_constraintTop_toTopOf="@+id/textView6">
 
         <RadioButton
             android:id="@+id/radioButton4"
@@ -148,45 +148,128 @@
 
     </RadioGroup>
 
-    <EditText
-    android:id="@+id/editTextEngineDisplacement"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="88dp"
-    android:hint="@string/engine_displacement_ml"
-    android:inputType="number"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-    <EditText
-    android:id="@+id/editTextPowerCreate"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
-    android:enabled="false"
-    android:hint="@string/power"
-    android:inputType="number"
-    app:layout_constraintStart_toStartOf="@+id/editTextEngineDisplacement"
-    app:layout_constraintTop_toBottomOf="@+id/editTextEngineDisplacement" />
-
     <Button
         android:id="@+id/btnSaveOnCreateAct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/save"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPowerCreate" />
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-    android:id="@+id/textViewMeasuringМalues"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:textSize="18sp"
-    app:layout_constraintBaseline_toBaselineOf="@+id/editTextPowerCreate"
-    app:layout_constraintStart_toEndOf="@+id/editTextPowerCreate" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+
+        <CheckedTextView
+            android:id="@+id/chTexPowerMeasure"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="16dp"
+            android:text="kW"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/seekBarPower"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/seekBarPower"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:stepSize="10"
+            android:valueFrom="150"
+            android:valueTo="3000"
+            app:layout_constraintEnd_toStartOf="@+id/chTexPowerMeasure"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvPowerDisplay"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvPowerDisplay"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="4dp"
+            android:text="@string/power"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/seekBarPower"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupEngine">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/engine_displacement"
+            android:textSize="18sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/etEngineMl"
+            app:layout_constraintEnd_toStartOf="@+id/etEngineMl"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/etEngineMl"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="6"
+            android:inputType="number"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@+id/spinnerEngineMeasure"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/textView2"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Spinner
+            android:id="@+id/spinnerEngineMeasure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:entries="@array/engine_measure"
+            app:layout_constraintBaseline_toBaselineOf="@+id/textView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/etEngineMl" />
+
+        <SeekBar
+            android:id="@+id/seekBarEngine"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
+            android:max="8000"
+            android:progress="2000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etEngineMl" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

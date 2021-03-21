@@ -23,4 +23,6 @@
     <string name="save">Save</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="engine_displacement">engine displacement</string>
+    />
 </resources>

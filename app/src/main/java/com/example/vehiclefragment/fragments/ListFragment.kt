@@ -8,12 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.vehiclefragment.MainActivity
 import com.example.vehiclefragment.R
 import com.example.vehiclefragment.adaptor.VehicleListAdaptor
 import com.example.vehiclefragment.data.VehicleItem
 import com.example.vehiclefragment.helperObject.InitHelp
-import com.example.vehiclefragment.interfaces.IVehicleEditListener
+import com.example.vehiclefragment.interfaces.IVehicleToEditListener
 
 class ListFragment : Fragment(R.layout.fragment_list) {
 
@@ -41,7 +40,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
 
         if (vehicleAdapter == null){
             vehicleList = InitHelp.initialize(localContext)
-            vehicleAdapter = VehicleListAdaptor(vehicleList, localContext as IVehicleEditListener)
+            vehicleAdapter = VehicleListAdaptor(vehicleList, localContext as IVehicleToEditListener)
         }
         
         fragment = view.findViewById<RecyclerView>(R.id.rvListFragment)
@@ -54,5 +53,8 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         vehicleAdapter?.notifyItemInserted(vehicleList.size - 1)
     }
 
+    fun updateVehicleItems(){
+        vehicleAdapter?.notifyDataSetChanged()
+    }
 
 }
