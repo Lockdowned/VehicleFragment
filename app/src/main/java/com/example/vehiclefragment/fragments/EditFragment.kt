@@ -10,7 +10,6 @@ import com.example.vehiclefragment.R
 import com.example.vehiclefragment.data.VehicleItem
 import com.example.vehiclefragment.databinding.FragmentEditBinding
 import com.example.vehiclefragment.interfaces.IUpdateListListener
-import com.example.vehiclefragment.interfaces.IVehicleCreatedVehicleListener
 
 class EditFragment : Fragment(R.layout.fragment_edit) {
 

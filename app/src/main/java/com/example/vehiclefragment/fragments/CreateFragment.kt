@@ -1,11 +1,9 @@
 package com.example.vehiclefragment.fragments
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,14 +16,14 @@ import com.example.vehiclefragment.databinding.FragmentCreateBinding
 import com.example.vehiclefragment.helperObject.ConverterUriToDrawable
 import com.example.vehiclefragment.interfaces.IVehicleCreatedVehicleListener
 
+private const val SELECT_IMAGE_CLICK = 1
+
 class CreateFragment : Fragment() {
 
     private var _binding: FragmentCreateBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var localContext: Context
-
-    private val SELECT_IMAGE_CLICK = 1
 
     private lateinit var newVehicle: VehicleItem
 
@@ -65,15 +63,13 @@ class CreateFragment : Fragment() {
             })
 
             chTexPowerMeasure.run {
-                setOnClickListener(object : View.OnClickListener {
-                    override fun onClick(v: View?) {
-                        text = if (text.equals("kW")) {
-                            "Watt"
-                        } else {
-                            "kW"
-                        }
+                setOnClickListener {
+                    text = if (text.equals("kW")) {
+                        "Watt"
+                    } else {
+                        "kW"
                     }
-                })
+                }
 
                 ArrayAdapter.createFromResource(localContext, R.array.engine_measure,
                         android.R.layout.simple_spinner_item).also { spinnerAdaptor ->
@@ -87,21 +83,18 @@ class CreateFragment : Fragment() {
 //                    }
 //                }
 
-                seekBarPower.addOnChangeListener { slider, value, fromUser ->
-                    tvPowerDisplay.text = "Power: ${value.toInt()}"
+                seekBarPower.addOnChangeListener { _, value, _ ->
+                    tvPowerDisplay.text = resources.getString(R.string.power)
+                            .plus(": ${value.toInt()}")
                 }
 
-                radioGroupEngine.setOnCheckedChangeListener { group, checkedId ->
-
-                }
-
-                radioGroupEngine.setOnCheckedChangeListener { group, checkedId ->
+                radioGroupEngine.setOnCheckedChangeListener { _, checkedId ->
                     if (checkedId == radioButtonElectricEngine.id){
                         etEngineMl.text.clear()
                         etEngineMl.isEnabled = false
                     } else {
                         etEngineMl.isEnabled = true
-                        tvPowerDisplay.text = "Power"
+                        tvPowerDisplay.text = resources.getString(R.string.power)
                     }
                 }
 
@@ -114,33 +107,15 @@ class CreateFragment : Fragment() {
                         return@setOnClickListener
                     }
 
-                    val textBrandAndModel = "${editTextBrand.text.toString()} " +
-                            "${editTextModel.text.toString()} ${editTextYearRel.text.toString()}"
+                    val textBrandAndModel = "${editTextBrand.text} " +
+                            "${editTextModel.text} ${editTextYearRel.text}"
                     newVehicle.brandAndModel = textBrandAndModel
 
-                    val checkedRadioButtonEngineId = radioGroupEngine.checkedRadioButtonId
-                    val engine: RadioButton? = radioGroupEngine.findViewById(checkedRadioButtonEngineId)
-                    val checkedRadioButtonGearId = radioGroupGear.checkedRadioButtonId
-                    val gear: RadioButton? = radioGroupGear.findViewById(checkedRadioButtonGearId)
-                    val specification = (if (engine?.let { true } == true) "${engine.text} " else "") +
-                            (if (gear?.let { engine != radioButtonElectricEngine} == true)
-                                "${gear.text} " else "") +
-                            (if (etEngineMl.isEnabled)
-                                "capacity: ${etEngineMl.text}${spinnerEngineMeasure.selectedItem} "
-                            else "") +
-                            (if (!tvPowerDisplay.text.equals("Power") &&
-                                    engine?.let { engine == radioButtonElectricEngine } == true)
-                                "${tvPowerDisplay.text}${chTexPowerMeasure.text} "
-                            else "")
-
-                    newVehicle.specification = specification
-
-
+                    newVehicle.specification = pickDataSpecificXml()
 
                     newVehicle.let {
                         (localContext as IVehicleCreatedVehicleListener).deliverVehicle(newVehicle)
                     }
-
                 }
             }
         }
@@ -158,7 +133,27 @@ class CreateFragment : Fragment() {
         }
     }
 
-
+    private fun pickDataSpecificXml(): String{
+        var specification = ""
+        binding.run {
+            val checkedRadioButtonEngineId = radioGroupEngine.checkedRadioButtonId
+            val engine: RadioButton? = radioGroupEngine.findViewById(checkedRadioButtonEngineId)
+            val checkedRadioButtonGearId = radioGroupGear.checkedRadioButtonId
+            val gear: RadioButton? = radioGroupGear.findViewById(checkedRadioButtonGearId)
+            fun engineEqualElectric() = engine?.let {engine == radioButtonElectricEngine}
+            specification =
+                    (if (engine != null)
+                        "${engine.text} " else "") +
+                    (if (gear?.let { engine != radioButtonElectricEngine} == true)
+                        "${gear.text} " else "") +
+                    (if (etEngineMl.isEnabled)
+                        "capacity: ${etEngineMl.text}${spinnerEngineMeasure.selectedItem} " else "") +
+                    (if (!tvPowerDisplay.text.equals("Power") && engineEqualElectric() == true)
+                        "${tvPowerDisplay.text}${chTexPowerMeasure.text} "
+                    else "")
+        }
+        return specification
+    }
 
 
 
