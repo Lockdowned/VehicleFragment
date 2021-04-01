@@ -6,10 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import com.example.vehiclefragment.R
 import com.example.vehiclefragment.data.VehicleItem
 import com.example.vehiclefragment.databinding.FragmentEditBinding
-import com.example.vehiclefragment.interfaces.IUpdateListListener
+import com.example.vehiclefragment.interfaces.IVehicleToEditListener
+import com.example.vehiclefragment.viewmodels.VehicleViewModel
 
 class EditFragment : Fragment(R.layout.fragment_edit) {
 
@@ -18,19 +20,21 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
 
     private var chosenItemVehicle:VehicleItem? = null
 
-    lateinit var localContext: IUpdateListListener
+    lateinit var localContext: IVehicleToEditListener
+
+    private val vehicleViewModel: VehicleViewModel by activityViewModels()
 
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        localContext = context as IUpdateListListener
+        localContext = context as IVehicleToEditListener
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         if (_binding == null){
             _binding = FragmentEditBinding.inflate(inflater, container, false)
         }
@@ -40,10 +44,16 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        chosenItemVehicle = vehicleViewModel.getSelected()
+
+        binding.imageViewServicePage.setImageDrawable(chosenItemVehicle?.img)
+        binding.tvBrandTextEditFragment.text = chosenItemVehicle?.brandAndModel
+            .plus(chosenItemVehicle?.specification)
+
         binding.btnEditOnPageService.setOnClickListener {
             chosenItemVehicle?.let {
                 it.serviceInfo = binding.etServiceEditFragment.text.toString()
-                localContext.updateListFragment()
+                localContext.toList()
             }
         }
     }
@@ -51,15 +61,6 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         chosenItemVehicle?.let { binding.etServiceEditFragment.setText(it.serviceInfo) }
-    }
-
-
-
-
-    fun fillEditView(vehicleItem: VehicleItem){
-        chosenItemVehicle = vehicleItem
-        binding.tvBrandTextEditFragment.text = vehicleItem.brandAndModel.plus(" " + vehicleItem.specification)
-        binding.imageViewServicePage.setImageDrawable(vehicleItem.img)
     }
 
 }

@@ -2,6 +2,7 @@ package com.example.vehiclefragment
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.vehiclefragment.data.VehicleItem
@@ -9,12 +10,11 @@ import com.example.vehiclefragment.databinding.ActivityMainBinding
 import com.example.vehiclefragment.fragments.CreateFragment
 import com.example.vehiclefragment.fragments.EditFragment
 import com.example.vehiclefragment.fragments.ListFragment
-import com.example.vehiclefragment.interfaces.IUpdateListListener
-import com.example.vehiclefragment.interfaces.IVehicleCreatedVehicleListener
+import com.example.vehiclefragment.helperObject.InitHelp
 import com.example.vehiclefragment.interfaces.IVehicleToEditListener
+import com.example.vehiclefragment.viewmodels.VehicleViewModel
 
-class MainActivity : AppCompatActivity(), IVehicleCreatedVehicleListener, IVehicleToEditListener,
-IUpdateListListener{
+class MainActivity : AppCompatActivity(), IVehicleToEditListener{
 
     private lateinit var listFragment: ListFragment
     private lateinit var createFragment: CreateFragment
@@ -24,15 +24,16 @@ IUpdateListListener{
 
     private var itemVehicleToEdit: VehicleItem? = null
 
+    private val vehicleViewModel: VehicleViewModel by viewModels()
 
-    
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        vehicleViewModel.allVehicle.value = InitHelp.initialize(this)
 
         listFragment = ListFragment()
         createFragment = CreateFragment()
@@ -68,9 +69,6 @@ IUpdateListListener{
         }
     }
 
-
-
-
     private fun setCurrentFragment(fragment: Fragment){
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.mainFragment, fragment)
@@ -78,21 +76,14 @@ IUpdateListListener{
         }
     }
 
-    override fun deliverVehicle(vehicleItem: VehicleItem) {
-        binding.mainMenu.selectedItemId = R.id.miList
-        listFragment.addNewVehicleItem(vehicleItem)
-    }
-
-    override fun itemToEdit(item: VehicleItem) {
+    override fun toEdit(item: VehicleItem) {
         itemVehicleToEdit = item
-        editFragment.fillEditView(item)
+        vehicleViewModel.select(item)
         binding.mainMenu.selectedItemId = R.id.miEdit
     }
 
-    override fun updateListFragment() {
-        listFragment.updateVehicleItems()
+    override fun toList() {
         binding.mainMenu.selectedItemId = R.id.miList
     }
-
 
 }

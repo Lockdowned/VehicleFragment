@@ -10,11 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.fragment.app.activityViewModels
 import com.example.vehiclefragment.R
 import com.example.vehiclefragment.data.VehicleItem
 import com.example.vehiclefragment.databinding.FragmentCreateBinding
 import com.example.vehiclefragment.helperObject.ConverterUriToDrawable
-import com.example.vehiclefragment.interfaces.IVehicleCreatedVehicleListener
+import com.example.vehiclefragment.interfaces.IVehicleToEditListener
+import com.example.vehiclefragment.viewmodels.VehicleViewModel
 
 private const val SELECT_IMAGE_CLICK = 1
 
@@ -26,6 +28,8 @@ class CreateFragment : Fragment() {
     private lateinit var localContext: Context
 
     private lateinit var newVehicle: VehicleItem
+
+    private val vehicleViewModel: VehicleViewModel by activityViewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -114,7 +118,8 @@ class CreateFragment : Fragment() {
                     newVehicle.specification = pickDataSpecificXml()
 
                     newVehicle.let {
-                        (localContext as IVehicleCreatedVehicleListener).deliverVehicle(newVehicle)
+                        vehicleViewModel.allVehicle.value?.add(it)
+                        (localContext as IVehicleToEditListener).toList()
                     }
                 }
             }
@@ -149,8 +154,7 @@ class CreateFragment : Fragment() {
                     (if (etEngineMl.isEnabled)
                         "capacity: ${etEngineMl.text}${spinnerEngineMeasure.selectedItem} " else "") +
                     (if (!tvPowerDisplay.text.equals("Power") && engineEqualElectric() == true)
-                        "${tvPowerDisplay.text}${chTexPowerMeasure.text} "
-                    else "")
+                        "${tvPowerDisplay.text}${chTexPowerMeasure.text} " else "")
         }
         return specification
     }

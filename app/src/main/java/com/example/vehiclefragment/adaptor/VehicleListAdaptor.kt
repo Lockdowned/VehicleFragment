@@ -32,7 +32,7 @@ class VehicleListAdaptor(private val vehicleList: List<VehicleItem>, private val
         holder.bind(vehicleList[position])
         holder.itemView.setOnClickListener {
             val chosenVehicleItem = vehicleList[position]
-            context.itemToEdit(chosenVehicleItem)
+            context.toEdit(chosenVehicleItem)
         }
 
 

@@ -6,13 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vehiclefragment.R
 import com.example.vehiclefragment.adaptor.VehicleListAdaptor
 import com.example.vehiclefragment.data.VehicleItem
-import com.example.vehiclefragment.helperObject.InitHelp
 import com.example.vehiclefragment.interfaces.IVehicleToEditListener
+import com.example.vehiclefragment.viewmodels.VehicleViewModel
 
 class ListFragment : Fragment(R.layout.fragment_list) {
 
@@ -21,6 +23,8 @@ class ListFragment : Fragment(R.layout.fragment_list) {
     private lateinit var vehicleList: MutableList<VehicleItem>
     private var vehicleAdapter: VehicleListAdaptor? = null
     private lateinit var fragment: RecyclerView
+
+    private val vehicleViewModel: VehicleViewModel by activityViewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -39,13 +43,21 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         super.onViewCreated(view, savedInstanceState)
 
         if (vehicleAdapter == null){
-            vehicleList = InitHelp.initialize(localContext)
-            vehicleAdapter = VehicleListAdaptor(vehicleList, localContext as IVehicleToEditListener)
+            vehicleAdapter = VehicleListAdaptor(vehicleViewModel.allVehicle.value!!, localContext as IVehicleToEditListener)
         }
         
         fragment = view.findViewById<RecyclerView>(R.id.rvListFragment)
         fragment.adapter = vehicleAdapter
         fragment.layoutManager = LinearLayoutManager(localContext)
+
+        vehicleViewModel.allVehicle.observe(
+            viewLifecycleOwner,
+            Observer { vehicle ->
+                vehicle?.let {
+                    vehicleAdapter?.notifyDataSetChanged()
+                }
+            }
+        )
     }
 
     fun addNewVehicleItem(vehicleItem: VehicleItem){
@@ -53,8 +65,5 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         vehicleAdapter?.notifyItemInserted(vehicleList.size - 1)
     }
 
-    fun updateVehicleItems(){
-        vehicleAdapter?.notifyDataSetChanged()
-    }
 
 }
