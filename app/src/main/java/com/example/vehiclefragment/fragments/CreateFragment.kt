@@ -12,15 +12,15 @@ import android.widget.*
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.activityViewModels
 import com.example.vehiclefragment.R
-import com.example.vehiclefragment.data.VehicleItem
+import com.example.vehiclefragment.db.entities.VehicleItem
 import com.example.vehiclefragment.databinding.FragmentCreateBinding
 import com.example.vehiclefragment.helperObject.ConverterUriToDrawable
-import com.example.vehiclefragment.interfaces.IVehicleToEditListener
+import com.example.vehiclefragment.interfaces.IFragmentCommunication
 import com.example.vehiclefragment.viewmodels.VehicleViewModel
 
 private const val SELECT_IMAGE_CLICK = 1
 
-class CreateFragment : Fragment() {
+class CreateFragment(private val vehicleViewModel: VehicleViewModel) : Fragment() {
 
     private var _binding: FragmentCreateBinding? = null
     private val binding get() = _binding!!
@@ -28,8 +28,6 @@ class CreateFragment : Fragment() {
     private lateinit var localContext: Context
 
     private lateinit var newVehicle: VehicleItem
-
-    private val vehicleViewModel: VehicleViewModel by activityViewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -45,8 +43,7 @@ class CreateFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        newVehicle = VehicleItem(AppCompatResources.getDrawable(localContext,
-                R.drawable.default_car), "textBrandAndModel", "", "", null)
+        newVehicle = VehicleItem("textBrandAndModel", "", "")
 
         binding.run {
 
@@ -118,8 +115,8 @@ class CreateFragment : Fragment() {
                     newVehicle.specification = pickDataSpecificXml()
 
                     newVehicle.let {
-                        vehicleViewModel.allVehicle.value?.add(it)
-                        (localContext as IVehicleToEditListener).toList()
+                        vehicleViewModel.insert(it)
+                        (localContext as IFragmentCommunication).toList()
                     }
                 }
             }
@@ -131,8 +128,8 @@ class CreateFragment : Fragment() {
         if (resultCode == Activity.RESULT_OK && requestCode == SELECT_IMAGE_CLICK) {
             data?.data.run {
                 binding.imageCreateNewVehicle.setImageURI(this)
-                newVehicle.img = ConverterUriToDrawable.uriToDrawable(this.toString(), localContext)
-                newVehicle.uriString = this.toString()
+//                newVehicle.img = ConverterUriToDrawable.uriToDrawable(this.toString(), localContext)
+//                newVehicle.uriString = this.toString()
             }
 
         }
@@ -151,7 +148,7 @@ class CreateFragment : Fragment() {
                         "${engine.text} " else "") +
                     (if (gear?.let { engine != radioButtonElectricEngine} == true)
                         "${gear.text} " else "") +
-                    (if (etEngineMl.isEnabled)
+                    (if (etEngineMl.isEnabled && etEngineMl.isDirty)
                         "capacity: ${etEngineMl.text}${spinnerEngineMeasure.selectedItem} " else "") +
                     (if (!tvPowerDisplay.text.equals("Power") && engineEqualElectric() == true)
                         "${tvPowerDisplay.text}${chTexPowerMeasure.text} " else "")

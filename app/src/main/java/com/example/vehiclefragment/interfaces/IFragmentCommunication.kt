@@ -1,8 +1,8 @@
 package com.example.vehiclefragment.interfaces
 
-import com.example.vehiclefragment.data.VehicleItem
+import com.example.vehiclefragment.db.entities.VehicleItem
 
-interface IVehicleToEditListener {
+interface IFragmentCommunication {
     fun toEdit(item: VehicleItem)
     fun toList()
 }

@@ -12,19 +12,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vehiclefragment.R
 import com.example.vehiclefragment.adaptor.VehicleListAdaptor
-import com.example.vehiclefragment.data.VehicleItem
-import com.example.vehiclefragment.interfaces.IVehicleToEditListener
+import com.example.vehiclefragment.db.entities.VehicleItem
+import com.example.vehiclefragment.interfaces.IFragmentCommunication
 import com.example.vehiclefragment.viewmodels.VehicleViewModel
 
-class ListFragment : Fragment(R.layout.fragment_list) {
+class ListFragment(private val vehicleViewModel: VehicleViewModel) : Fragment(R.layout.fragment_list) {
 
     private lateinit var localContext: Context
 
     private lateinit var vehicleList: MutableList<VehicleItem>
     private var vehicleAdapter: VehicleListAdaptor? = null
     private lateinit var fragment: RecyclerView
-
-    private val vehicleViewModel: VehicleViewModel by activityViewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -43,7 +41,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         super.onViewCreated(view, savedInstanceState)
 
         if (vehicleAdapter == null){
-            vehicleAdapter = VehicleListAdaptor(vehicleViewModel.allVehicle.value!!, localContext as IVehicleToEditListener)
+            vehicleAdapter = VehicleListAdaptor(vehicleViewModel, localContext as IFragmentCommunication)
         }
         
         fragment = view.findViewById<RecyclerView>(R.id.rvListFragment)
@@ -54,7 +52,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
             viewLifecycleOwner,
             Observer { vehicle ->
                 vehicle?.let {
-                    vehicleAdapter?.notifyDataSetChanged()
+                    vehicleAdapter?.submitList(it)
                 }
             }
         )

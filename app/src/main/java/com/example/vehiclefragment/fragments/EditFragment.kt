@@ -8,26 +8,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.example.vehiclefragment.R
-import com.example.vehiclefragment.data.VehicleItem
+import com.example.vehiclefragment.db.entities.VehicleItem
 import com.example.vehiclefragment.databinding.FragmentEditBinding
-import com.example.vehiclefragment.interfaces.IVehicleToEditListener
+import com.example.vehiclefragment.interfaces.IFragmentCommunication
 import com.example.vehiclefragment.viewmodels.VehicleViewModel
 
-class EditFragment : Fragment(R.layout.fragment_edit) {
+class EditFragment(private val vehicleViewModel: VehicleViewModel) : Fragment(R.layout.fragment_edit) {
 
     private var _binding: FragmentEditBinding? = null
     private val binding get() = _binding!!
 
-    private var chosenItemVehicle:VehicleItem? = null
+    private var chosenItemVehicle: VehicleItem? = null
 
-    lateinit var localContext: IVehicleToEditListener
-
-    private val vehicleViewModel: VehicleViewModel by activityViewModels()
-
+    lateinit var localContext: IFragmentCommunication
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        localContext = context as IVehicleToEditListener
+        localContext = context as IFragmentCommunication
     }
 
     override fun onCreateView(
@@ -46,13 +43,14 @@ class EditFragment : Fragment(R.layout.fragment_edit) {
 
         chosenItemVehicle = vehicleViewModel.getSelected()
 
-        binding.imageViewServicePage.setImageDrawable(chosenItemVehicle?.img)
+//        binding.imageViewServicePage.setImageDrawable(chosenItemVehicle?.img)
         binding.tvBrandTextEditFragment.text = chosenItemVehicle?.brandAndModel
             .plus(chosenItemVehicle?.specification)
 
         binding.btnEditOnPageService.setOnClickListener {
             chosenItemVehicle?.let {
                 it.serviceInfo = binding.etServiceEditFragment.text.toString()
+                vehicleViewModel.update(it)
                 localContext.toList()
             }
         }

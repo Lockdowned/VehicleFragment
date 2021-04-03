@@ -1,16 +1,23 @@
 package com.example.vehiclefragment.viewmodels
 
-import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.example.vehiclefragment.data.VehicleItem
-import com.example.vehiclefragment.helperObject.InitHelp
+import androidx.lifecycle.*
+import com.example.vehiclefragment.db.VehicleRepositiry
+import com.example.vehiclefragment.db.entities.VehicleItem
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import java.lang.IllegalArgumentException
 
-class VehicleViewModel: ViewModel() {
+class VehicleViewModel(private val repository: VehicleRepositiry): ViewModel() {
 
-    val allVehicle = MutableLiveData<MutableList<VehicleItem>>(mutableListOf())
+    val allVehicle: LiveData<List<VehicleItem>> = repository.allVehicle.asLiveData()
+
     private var selectedVehicle: VehicleItem? = null
+
+
+    fun insert(vehicle: VehicleItem) = viewModelScope.launch {
+        repository.insert(vehicle)
+    }
+
 
     fun select(item: VehicleItem){
         selectedVehicle = item
@@ -18,5 +25,19 @@ class VehicleViewModel: ViewModel() {
 
     fun getSelected(): VehicleItem? {
         return selectedVehicle
+    }
+
+    fun update(vehicle: VehicleItem) = viewModelScope.launch {
+        repository.update(vehicle)
+    }
+}
+
+class VehicleViewModelFactory(private val repository: VehicleRepositiry): ViewModelProvider.Factory{
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(VehicleViewModel::class.java)){
+            @Suppress("UNCHECKED_CAST")
+            return VehicleViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
