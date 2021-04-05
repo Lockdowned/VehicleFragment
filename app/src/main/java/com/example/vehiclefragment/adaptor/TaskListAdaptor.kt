@@ -1,5 +1,7 @@
 package com.example.vehiclefragment.adaptor
 
+import android.app.AlertDialog
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -9,8 +11,10 @@ import com.example.vehiclefragment.databinding.ItemForEditFragmentBinding
 import com.example.vehiclefragment.db.entities.TaskItem
 import com.example.vehiclefragment.viewmodels.TaskViewModel
 
-class TaskListAdaptor(private val list: List<TaskItem>, private val taskViewModel: TaskViewModel):
+class TaskListAdaptor(private val list: MutableList<TaskItem>, private val taskViewModel: TaskViewModel):
 ListAdapter<TaskItem, TaskListAdaptor.TaskListHolder>(TaskComparator()){
+
+    private var context: Context? = null
 
     inner class TaskListHolder(private val taskItemBinding: ItemForEditFragmentBinding):
             RecyclerView.ViewHolder(taskItemBinding.root){
@@ -27,6 +31,7 @@ ListAdapter<TaskItem, TaskListAdaptor.TaskListHolder>(TaskComparator()){
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskListHolder {
+        context = parent.context
         val taskItemBinding = ItemForEditFragmentBinding.inflate(LayoutInflater.from(parent.context),
         parent, false)
         return TaskListHolder(taskItemBinding)
@@ -34,10 +39,26 @@ ListAdapter<TaskItem, TaskListAdaptor.TaskListHolder>(TaskComparator()){
 
     override fun onBindViewHolder(holder: TaskListHolder, position: Int) {
         holder.bind(list[position])
-//        holder.bind(getItem(position))
-        holder.itemView.setOnClickListener {
-
+        holder.itemView.setOnLongClickListener {
+            deleteDialog(list[position])
+            true
         }
+    }
+
+    private fun deleteDialog(taskItem: TaskItem){
+        val dialog = AlertDialog.Builder(context)
+        dialog.run{
+            setMessage("Delete this task: ${taskItem.taskText} ?")
+            setPositiveButton("Yes"){ _,_ ->
+                taskViewModel.delete(taskItem.id!!)
+                list.remove(taskItem)
+                notifyDataSetChanged()
+            }
+            setNegativeButton("No"){ _,_ ->
+            }
+        }
+        val alertDialog = dialog.create()
+        alertDialog.show()
     }
 
     override fun getItemCount(): Int {

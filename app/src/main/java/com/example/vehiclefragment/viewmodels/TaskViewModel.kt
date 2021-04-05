@@ -28,6 +28,10 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel() {
         repository.update(taskItem)
     }
 
+    fun delete(taskId: Int) = viewModelScope.launch {
+        repository.delete(taskId)
+    }
+
 //    private var tasks: List<TaskItem>? = null
 //
 //    fun tasks(id: Int): List<VehicleWithTasks>?{

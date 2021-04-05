@@ -18,10 +18,15 @@ interface TaskDao {
     @Update
     suspend fun updateTask(task: TaskItem)
 
+    @Transaction
+    @Query("DELETE FROM task_table WHERE id = :taskId")
+    suspend fun delete(taskId: Int)
+
 //    @Query("SELECT * FROM task_table WHERE id_vehicle = :idInVehicle")
 //    suspend fun getTasks(idInVehicle: Int): List<TaskItem>
 
     @Query("SELECT * FROM task_table WHERE id_vehicle = :idInVehicle")
     fun getTasks(idInVehicle: Int): Flow<List<TaskItem>>
+
 
 }

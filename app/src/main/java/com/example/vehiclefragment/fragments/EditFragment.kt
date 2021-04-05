@@ -67,19 +67,15 @@ class EditFragment(
             .plus(chosenItemVehicle?.specification)
 
 
-
         chosenItemVehicle?.let { taskViewModel.setTasks(it.id!!) }
 
         taskViewModel.allTasks?.observe(viewLifecycleOwner, {
-            Toast.makeText(localContext as MainActivity, it.toString() , Toast.LENGTH_LONG).show()
+//            Toast.makeText(localContext as MainActivity, it.toString() , Toast.LENGTH_LONG).show()
 
-            taskListAdaptor = TaskListAdaptor(it, taskViewModel)
+            taskListAdaptor = TaskListAdaptor(it as MutableList<TaskItem>, taskViewModel)
             binding.rvTaskList.adapter = taskListAdaptor
             binding.rvTaskList.layoutManager = LinearLayoutManager(localContext as MainActivity)
-
         })
-
-
 
         binding.buttonAddTask.setOnClickListener {
             if (binding.etTextTaskToAdd.text.isNotEmpty()){
@@ -89,27 +85,12 @@ class EditFragment(
                         chosenItemVehicle!!.id
                 )
                 taskViewModel.insertTask(task)
+                binding.etTextTaskToAdd.setText("")
             }
         }
 
-        chosenItemVehicle?.let {
-
-//            taskListAdaptor = TaskListAdaptor(taskViewModel.getList(1))
-            binding.rvTaskList.adapter = taskListAdaptor
-            binding.rvTaskList.layoutManager = LinearLayoutManager(localContext as MainActivity)
-        }
-
-
-
-        //for clear xml etServiceInf
-//        binding.etServiceEditFragment.text.clear()
 
         fromEditChangeString = chosenItemVehicle?.serviceInfo
-
-
-
-
-
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -132,5 +113,4 @@ class EditFragment(
 
         })
     }
-
 }
