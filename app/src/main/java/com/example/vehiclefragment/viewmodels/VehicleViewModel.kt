@@ -1,9 +1,8 @@
 package com.example.vehiclefragment.viewmodels
 
 import androidx.lifecycle.*
-import com.example.vehiclefragment.db.VehicleRepositiry
+import com.example.vehiclefragment.repos.VehicleRepositiry
 import com.example.vehiclefragment.db.entities.VehicleItem
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 

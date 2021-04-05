@@ -20,7 +20,6 @@ class ListFragment(private val vehicleViewModel: VehicleViewModel) : Fragment(R.
 
     private lateinit var localContext: Context
 
-    private lateinit var vehicleList: MutableList<VehicleItem>
     private var vehicleAdapter: VehicleListAdaptor? = null
     private lateinit var fragment: RecyclerView
 
@@ -56,11 +55,6 @@ class ListFragment(private val vehicleViewModel: VehicleViewModel) : Fragment(R.
                 }
             }
         )
-    }
-
-    fun addNewVehicleItem(vehicleItem: VehicleItem){
-        vehicleList.add(vehicleItem)
-        vehicleAdapter?.notifyItemInserted(vehicleList.size - 1)
     }
 
 

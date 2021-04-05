@@ -13,13 +13,18 @@ import com.example.vehiclefragment.fragments.EditFragment
 import com.example.vehiclefragment.fragments.ListFragment
 import com.example.vehiclefragment.helperObject.InitHelp
 import com.example.vehiclefragment.interfaces.IFragmentCommunication
+import com.example.vehiclefragment.viewmodels.TaskViewModel
+import com.example.vehiclefragment.viewmodels.TaskViewModelFactory
 import com.example.vehiclefragment.viewmodels.VehicleViewModel
 import com.example.vehiclefragment.viewmodels.VehicleViewModelFactory
 
 class MainActivity : AppCompatActivity(), IFragmentCommunication{
 
     private val vehicleViewModel: VehicleViewModel by viewModels{
-        VehicleViewModelFactory((application as VehicleApplication).repository)
+        VehicleViewModelFactory((application as VehicleApplication).vehicleRepository)
+    }
+    private val taskViewModel: TaskViewModel by viewModels {
+        TaskViewModelFactory((application as VehicleApplication).taskRepository)
     }
 
     private lateinit var listFragment: ListFragment
@@ -30,7 +35,6 @@ class MainActivity : AppCompatActivity(), IFragmentCommunication{
 
     private var itemVehicleToEdit: VehicleItem? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -38,7 +42,7 @@ class MainActivity : AppCompatActivity(), IFragmentCommunication{
 
         listFragment = ListFragment(vehicleViewModel)
         createFragment = CreateFragment(vehicleViewModel)
-        editFragment = EditFragment(vehicleViewModel)
+        editFragment = EditFragment(vehicleViewModel, taskViewModel)
 
         supportFragmentManager.beginTransaction().apply {
             add(R.id.mainFragment, createFragment)
@@ -51,7 +55,12 @@ class MainActivity : AppCompatActivity(), IFragmentCommunication{
 
         binding.mainMenu.setOnNavigationItemSelectedListener {
             when(it.itemId){
-                R.id.miList -> setCurrentFragment(listFragment)
+                R.id.miList -> {
+                    editFragment.fromEditChangeString?.let { textServ ->
+                        vehicleViewModel.getSelected()?.serviceInfo = textServ
+                    }
+                    setCurrentFragment(listFragment)
+                }
                 R.id.miCreate -> {
                     createFragment = CreateFragment(vehicleViewModel)
                     setCurrentFragment(createFragment)

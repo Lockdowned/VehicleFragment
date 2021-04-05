@@ -6,15 +6,21 @@ import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
 import com.example.vehiclefragment.R
+import com.example.vehiclefragment.db.dao.TaskDao
 import com.example.vehiclefragment.db.dao.VehicleDao
+import com.example.vehiclefragment.db.entities.TaskItem
 import com.example.vehiclefragment.db.entities.VehicleItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = arrayOf(VehicleItem::class), version = 1, exportSchema = false)
+@Database(
+        entities = [VehicleItem::class, TaskItem::class],
+        version = 1,
+        exportSchema = false)
 abstract class VehicleRoomDatabase: RoomDatabase(){
 
     abstract fun vehicleDao(): VehicleDao
+    abstract fun taskDao(): TaskDao
 
     companion object{
         @Volatile
@@ -39,16 +45,18 @@ abstract class VehicleRoomDatabase: RoomDatabase(){
     private class VehicleDatabaseCallBack(
         private val scope: CoroutineScope
     ): RoomDatabase.Callback(){
+
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
             INSTANCE?.let { database ->
                 scope.launch {
-                    populateDatabase(database.vehicleDao())
+                    populateVehicleDatabase(database.vehicleDao())
+                    populateTaskDatabase(database.taskDao())
                 }
             }
         }
 
-        suspend fun populateDatabase(vehicleDao: VehicleDao){
+        suspend fun populateVehicleDatabase(vehicleDao: VehicleDao){
             vehicleDao.deleteAll()
 
             var vehicle = VehicleItem(
@@ -63,6 +71,28 @@ abstract class VehicleRoomDatabase: RoomDatabase(){
                 "Run 1200 km, need change wheels",
             )
             vehicleDao.insert(vehicle)
+        }
+
+        suspend fun populateTaskDatabase(taskDao: TaskDao){
+
+            var task = TaskItem(
+                    false,
+                    "just relax",
+                    1
+            )
+            taskDao.insert(task)
+            task = TaskItem(
+                    true,
+                    "second task",
+                    1
+            )
+            taskDao.insert(task)
+            task = TaskItem(
+                    true,
+                    "first task into second vehicle",
+                    2
+            )
+            taskDao.insert(task)
         }
     }
 

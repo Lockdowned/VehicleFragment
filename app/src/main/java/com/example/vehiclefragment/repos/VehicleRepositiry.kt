@@ -1,4 +1,4 @@
-package com.example.vehiclefragment.db
+package com.example.vehiclefragment.repos
 
 import androidx.annotation.WorkerThread
 import com.example.vehiclefragment.db.dao.VehicleDao

@@ -1,6 +1,7 @@
 package com.example.vehiclefragment.db.dao
 
 import androidx.room.*
+import com.example.vehiclefragment.db.entities.TaskItem
 import com.example.vehiclefragment.db.entities.VehicleItem
 import kotlinx.coroutines.flow.Flow
 
@@ -17,4 +18,5 @@ interface VehicleDao {
 
     @Update
     suspend fun update(vararg vehicle: VehicleItem)
+
 }
