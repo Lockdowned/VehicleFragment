@@ -8,28 +8,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.Toast
-import androidx.annotation.RestrictTo
-import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.vehiclefragment.MainActivity
 import com.example.vehiclefragment.R
-import com.example.vehiclefragment.adaptor.TaskListAdaptor
+import com.example.vehiclefragment.adaptors.TaskListAdaptor
 import com.example.vehiclefragment.db.entities.VehicleItem
 import com.example.vehiclefragment.databinding.FragmentEditBinding
 import com.example.vehiclefragment.db.entities.TaskItem
-import com.example.vehiclefragment.interfaces.IFragmentCommunication
 import com.example.vehiclefragment.viewmodels.TaskViewModel
 import com.example.vehiclefragment.viewmodels.VehicleViewModel
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class EditFragment(private val taskViewModel: TaskViewModel)
+class EditFragment(private val taskViewModel: TaskViewModel,
+                    private val vehicleViewModel: VehicleViewModel)
     : Fragment(R.layout.fragment_edit) {
 
     private var _binding: FragmentEditBinding? = null
@@ -66,7 +58,6 @@ class EditFragment(private val taskViewModel: TaskViewModel)
             taskViewModel.setVehicleWithTasks(it)
         }
 
-
 //        chosenItemVehicle = taskViewModel.vehicleWithTasks?.value?.first()?.vehicle//ПОЧЕМУ null??
 
         taskViewModel.vehicleWithTasks?.observe(viewLifecycleOwner, {
@@ -77,11 +68,8 @@ class EditFragment(private val taskViewModel: TaskViewModel)
             binding.rvTaskList.layoutManager = LinearLayoutManager(localContext)
         })
 
-
-
-
-
         binding.buttonAddTask.setOnClickListener {
+            chosenItemVehicle!!.serviceInfo = binding.etServiceEditFragment.text.toString()
             if (binding.etTextTaskToAdd.text.isNotEmpty()){
                 val task = TaskItem(
                         false,
@@ -92,8 +80,6 @@ class EditFragment(private val taskViewModel: TaskViewModel)
                 binding.etTextTaskToAdd.setText("")
             }
         }
-
-
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -123,6 +109,7 @@ class EditFragment(private val taskViewModel: TaskViewModel)
             override fun afterTextChanged(text: Editable?) { // почему editText хранит предыдущие значения(уже стёртые)
                 chosenItemVehicle?.let {
                     it.serviceInfo = text.toString()
+                    vehicleViewModel.update(chosenItemVehicle!!)
                 }
             }
 

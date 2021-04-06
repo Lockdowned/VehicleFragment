@@ -3,16 +3,12 @@ package com.example.vehiclefragment.fragments
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vehiclefragment.R
-import com.example.vehiclefragment.adaptor.VehicleListAdaptor
-import com.example.vehiclefragment.db.entities.VehicleItem
+import com.example.vehiclefragment.adaptors.VehicleListAdaptor
 import com.example.vehiclefragment.interfaces.IFragmentCommunication
 import com.example.vehiclefragment.viewmodels.VehicleViewModel
 
@@ -20,20 +16,12 @@ class ListFragment(private val vehicleViewModel: VehicleViewModel) : Fragment(R.
 
     private lateinit var localContext: Context
 
-    private var vehicleAdapter: VehicleListAdaptor? = null
+    var vehicleAdapter: VehicleListAdaptor? = null
     private lateinit var fragment: RecyclerView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         localContext = context
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,6 +30,7 @@ class ListFragment(private val vehicleViewModel: VehicleViewModel) : Fragment(R.
         if (vehicleAdapter == null){
             vehicleAdapter = VehicleListAdaptor(vehicleViewModel, localContext as IFragmentCommunication)
         }
+
         
         fragment = view.findViewById<RecyclerView>(R.id.rvListFragment)
         fragment.adapter = vehicleAdapter

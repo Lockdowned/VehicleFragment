@@ -1,4 +1,4 @@
-package com.example.vehiclefragment.adaptor
+package com.example.vehiclefragment.adaptors
 
 import android.app.AlertDialog
 import android.content.Context
