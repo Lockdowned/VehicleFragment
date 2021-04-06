@@ -10,7 +10,6 @@ data class VehicleItem(
         @ColumnInfo(name = "brand_and_model") var brandAndModel: String,
         var specification: String,
         @ColumnInfo(name = "service_info")var serviceInfo: String,
-        @ColumnInfo(name = "uri_string") var uriString: String? = null,
         @ColumnInfo var img: String? = null,
         @PrimaryKey(autoGenerate = true) val id: Int? = null
 )

@@ -51,8 +51,6 @@ ListAdapter<TaskItem, TaskListAdaptor.TaskListHolder>(TaskComparator()){
             setMessage("Delete this task: ${taskItem.taskText} ?")
             setPositiveButton("Yes"){ _,_ ->
                 taskViewModel.delete(taskItem.id!!)
-                list.remove(taskItem)
-                notifyDataSetChanged()
             }
             setNegativeButton("No"){ _,_ ->
             }
@@ -68,7 +66,7 @@ ListAdapter<TaskItem, TaskListAdaptor.TaskListHolder>(TaskComparator()){
 
 
 
-    class TaskComparator: DiffUtil.ItemCallback<TaskItem>(){
+    class TaskComparator: DiffUtil.ItemCallback<TaskItem>(){ // ясно что в моей реализации не нужно т.к. сюда передаются не обьекты liveData
         override fun areItemsTheSame(oldItem: TaskItem, newItem: TaskItem): Boolean {
             return oldItem.id == newItem.id
         }

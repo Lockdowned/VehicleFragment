@@ -9,12 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.fragment.app.activityViewModels
 import com.example.vehiclefragment.R
 import com.example.vehiclefragment.db.entities.VehicleItem
 import com.example.vehiclefragment.databinding.FragmentCreateBinding
-import com.example.vehiclefragment.helperObject.ConverterUriToDrawable
 import com.example.vehiclefragment.interfaces.IFragmentCommunication
 import com.example.vehiclefragment.viewmodels.VehicleViewModel
 
@@ -22,8 +19,7 @@ private const val SELECT_IMAGE_CLICK = 1
 
 class CreateFragment(private val vehicleViewModel: VehicleViewModel) : Fragment() {
 
-    private var _binding: FragmentCreateBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentCreateBinding
 
     private lateinit var localContext: Context
 
@@ -35,7 +31,7 @@ class CreateFragment(private val vehicleViewModel: VehicleViewModel) : Fragment(
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentCreateBinding.inflate(inflater, container, false)
+        binding = FragmentCreateBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -126,12 +122,10 @@ class CreateFragment(private val vehicleViewModel: VehicleViewModel) : Fragment(
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == SELECT_IMAGE_CLICK) {
-            data?.data.run {
-                binding.imageCreateNewVehicle.setImageURI(this)
-//                newVehicle.img = ConverterUriToDrawable.uriToDrawable(this.toString(), localContext)
-//                newVehicle.uriString = this.toString()
+            data?.data.let { imgUri ->
+                binding.imageCreateNewVehicle.setImageURI(imgUri)
+                newVehicle.img = imgUri.toString()
             }
-
         }
     }
 
@@ -148,7 +142,7 @@ class CreateFragment(private val vehicleViewModel: VehicleViewModel) : Fragment(
                         "${engine.text} " else "") +
                     (if (gear?.let { engine != radioButtonElectricEngine} == true)
                         "${gear.text} " else "") +
-                    (if (etEngineMl.isEnabled && etEngineMl.isDirty)
+                    (if (etEngineMl.isEnabled && etEngineMl.text.isNotEmpty())
                         "capacity: ${etEngineMl.text}${spinnerEngineMeasure.selectedItem} " else "") +
                     (if (!tvPowerDisplay.text.equals("Power") && engineEqualElectric() == true)
                         "${tvPowerDisplay.text}${chTexPowerMeasure.text} " else "")

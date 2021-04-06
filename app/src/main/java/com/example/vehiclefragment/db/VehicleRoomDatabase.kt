@@ -63,12 +63,14 @@ abstract class VehicleRoomDatabase: RoomDatabase(){
                 "Mini Cooper 2009",
                 "1000 petrol, BS 2, 100 hp",
                 "Run 500 km, blink led",
+                "https://imgd.aeplcdn.com/664x374/n/cw/ec/34560/cooper-exterior-right-front-three-quarter.jpeg?q=85"
             )
             vehicleDao.insert(vehicle)
             vehicle = VehicleItem(
                 "Honda Accord 2011",
                 "1800 diesel, DG 4, 130 hp",
                 "Run 1200 km, need change wheels",
+                "https://img2.freepng.ru/20180411/rpq/kisspng-2017-honda-accord-hybrid-car-honda-fcx-clarity-201-honda-5acecc5f037a07.1845104315235021750142.jpg"
             )
             vehicleDao.insert(vehicle)
         }

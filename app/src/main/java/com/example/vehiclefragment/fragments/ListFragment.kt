@@ -28,7 +28,7 @@ class ListFragment(private val vehicleViewModel: VehicleViewModel) : Fragment(R.
         super.onViewCreated(view, savedInstanceState)
 
         if (vehicleAdapter == null){
-            vehicleAdapter = VehicleListAdaptor(vehicleViewModel, localContext as IFragmentCommunication)
+            vehicleAdapter = VehicleListAdaptor(vehicleViewModel, localContext)
         }
 
         
