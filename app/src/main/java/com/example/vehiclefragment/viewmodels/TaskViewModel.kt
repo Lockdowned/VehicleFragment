@@ -9,15 +9,16 @@ import kotlinx.coroutines.launch
 
 class TaskViewModel(private val repository: TaskRepository): ViewModel() {
 
-    private var vehicleWithTasks: List<VehicleWithTasks>? = null
+    var vehicleWithTasks: LiveData<List<VehicleWithTasks>>? = null
 
-    fun getList(id: Int): List<VehicleWithTasks>?{
+    var chosenVehicleId: Int? = null
+
+    fun setVehicleWithTasks(id: Int){
         getVehicleWithTasks(id)
-        return vehicleWithTasks
     }
 
     private fun getVehicleWithTasks(id: Int)  = viewModelScope.launch {
-         vehicleWithTasks = repository.getVehicleWithTasks(id)
+         vehicleWithTasks = repository.getVehicleWithTasks(id).asLiveData()
     }
 
     fun insertTask(taskItem: TaskItem) = viewModelScope.launch {
@@ -31,24 +32,6 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel() {
     fun delete(taskId: Int) = viewModelScope.launch {
         repository.delete(taskId)
     }
-
-//    private var tasks: List<TaskItem>? = null
-//
-//    fun tasks(id: Int): List<VehicleWithTasks>?{
-//        getTasks(id)
-//        return vehicleWithTasks
-//    }
-//
-//    private fun getTasks(id: Int)  = viewModelScope.launch {
-//        tasks = repository.getTasks(id)
-//    }
-
-    var allTasks: LiveData<List<TaskItem>>? = null
-
-    fun setTasks(idVehicle: Int) = viewModelScope.launch {
-        allTasks = repository.getTasks(idVehicle).asLiveData()
-    }
-
 
 }
 

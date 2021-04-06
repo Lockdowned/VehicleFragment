@@ -10,9 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.annotation.RestrictTo
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vehiclefragment.MainActivity
 import com.example.vehiclefragment.R
@@ -23,27 +25,25 @@ import com.example.vehiclefragment.db.entities.TaskItem
 import com.example.vehiclefragment.interfaces.IFragmentCommunication
 import com.example.vehiclefragment.viewmodels.TaskViewModel
 import com.example.vehiclefragment.viewmodels.VehicleViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-class EditFragment(
-        private val vehicleViewModel: VehicleViewModel,
-        private val taskViewModel: TaskViewModel)
+class EditFragment(private val taskViewModel: TaskViewModel)
     : Fragment(R.layout.fragment_edit) {
 
     private var _binding: FragmentEditBinding? = null
     private val binding get() = _binding!!
 
-    private var chosenItemVehicle: VehicleItem? = null
+    var chosenItemVehicle: VehicleItem? = null
 
-    lateinit var localContext: IFragmentCommunication
+    private lateinit var localContext: Context
 
     private var taskListAdaptor: TaskListAdaptor? = null
 
-    var fromEditChangeString: String? = null
-
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        localContext = context as IFragmentCommunication
+        localContext = context
     }
 
     override fun onCreateView(
@@ -54,35 +54,39 @@ class EditFragment(
         if (_binding == null){
             _binding = FragmentEditBinding.inflate(inflater, container, false)
         }
+        chosenItemVehicle = null
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        chosenItemVehicle = vehicleViewModel.getSelected()
 
-//        binding.imageViewServicePage.setImageDrawable(chosenItemVehicle?.img)
-        binding.tvBrandTextEditFragment.text = chosenItemVehicle?.brandAndModel
-            .plus(chosenItemVehicle?.specification)
+        taskViewModel.chosenVehicleId?.let {
+            taskViewModel.setVehicleWithTasks(it)
+        }
 
 
-        chosenItemVehicle?.let { taskViewModel.setTasks(it.id!!) }
+//        chosenItemVehicle = taskViewModel.vehicleWithTasks?.value?.first()?.vehicle//ПОЧЕМУ null??
 
-        taskViewModel.allTasks?.observe(viewLifecycleOwner, {
-//            Toast.makeText(localContext as MainActivity, it.toString() , Toast.LENGTH_LONG).show()
+        taskViewModel.vehicleWithTasks?.observe(viewLifecycleOwner, {
+            chosenItemVehicle = it.first().vehicle
 
-            taskListAdaptor = TaskListAdaptor(it as MutableList<TaskItem>, taskViewModel)
+            taskListAdaptor = TaskListAdaptor(it.first().tasks as MutableList<TaskItem>, taskViewModel)
             binding.rvTaskList.adapter = taskListAdaptor
-            binding.rvTaskList.layoutManager = LinearLayoutManager(localContext as MainActivity)
+            binding.rvTaskList.layoutManager = LinearLayoutManager(localContext)
         })
+
+
+
+
 
         binding.buttonAddTask.setOnClickListener {
             if (binding.etTextTaskToAdd.text.isNotEmpty()){
                 val task = TaskItem(
                         false,
                         binding.etTextTaskToAdd.text.toString(),
-                        chosenItemVehicle!!.id
+                        chosenItemVehicle?.id
                 )
                 taskViewModel.insertTask(task)
                 binding.etTextTaskToAdd.setText("")
@@ -90,12 +94,21 @@ class EditFragment(
         }
 
 
-        fromEditChangeString = chosenItemVehicle?.serviceInfo
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        chosenItemVehicle?.let { binding.etServiceEditFragment.setText(it.serviceInfo) }
+        lifecycleScope.launch { // такое решение не очень
+            while (true){
+                delay(1)
+                if (chosenItemVehicle != null) break
+            }
+//            binding.imageViewServicePage.setImageDrawable(chosenItemVehicle?.img)
+            binding.tvBrandTextEditFragment.text = chosenItemVehicle?.brandAndModel.plus("\n")
+                    .plus(chosenItemVehicle?.specification)
+            chosenItemVehicle?.let { binding.etServiceEditFragment.setText(it.serviceInfo) }
+        }
+
         binding.etTextTaskToAdd.setText("")
 
         binding.etServiceEditFragment.addTextChangedListener(object: TextWatcher{
@@ -107,8 +120,10 @@ class EditFragment(
 
             }
 
-            override fun afterTextChanged(text: Editable?) {
-                fromEditChangeString = text.toString()
+            override fun afterTextChanged(text: Editable?) { // почему editText хранит предыдущие значения(уже стёртые)
+                chosenItemVehicle?.let {
+                    it.serviceInfo = text.toString()
+                }
             }
 
         })

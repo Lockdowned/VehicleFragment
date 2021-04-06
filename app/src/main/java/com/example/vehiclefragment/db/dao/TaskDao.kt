@@ -11,9 +11,11 @@ interface TaskDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(task: TaskItem)
 
-    @Transaction
     @Query("SELECT * FROM vehicle_table WHERE id = :idInVehicle")
-    suspend fun getVehicleWithTasks(idInVehicle: Int): List<VehicleWithTasks>
+    fun getVehicleWithTasks(idInVehicle: Int): Flow<List<VehicleWithTasks>>
+
+//    @Query("SELECT * FROM vehicle_table WHERE id = :idInVehicle")
+//    fun getVehicleWithTasks(idInVehicle: Int): List<VehicleWithTasks> // почему нельзя брать просто List
 
     @Update
     suspend fun updateTask(task: TaskItem)
@@ -21,12 +23,4 @@ interface TaskDao {
     @Transaction
     @Query("DELETE FROM task_table WHERE id = :taskId")
     suspend fun delete(taskId: Int)
-
-//    @Query("SELECT * FROM task_table WHERE id_vehicle = :idInVehicle")
-//    suspend fun getTasks(idInVehicle: Int): List<TaskItem>
-
-    @Query("SELECT * FROM task_table WHERE id_vehicle = :idInVehicle")
-    fun getTasks(idInVehicle: Int): Flow<List<TaskItem>>
-
-
 }

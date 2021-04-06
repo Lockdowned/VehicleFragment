@@ -11,7 +11,7 @@ class TaskRepository(private val taskDao: TaskDao) {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun getVehicleWithTasks(id: Int): List<VehicleWithTasks>{
+    suspend fun getVehicleWithTasks(id: Int): Flow<List<VehicleWithTasks>>{
         return taskDao.getVehicleWithTasks(id)
     }
 
@@ -33,16 +33,4 @@ class TaskRepository(private val taskDao: TaskDao) {
     suspend fun delete(taskId: Int){
         taskDao.delete(taskId)
     }
-
-//    @Suppress("RedundantSuspendModifier")
-//    @WorkerThread
-//    suspend fun getTasks(idVehicle: Int): List<TaskItem>{
-//        return taskDao.getTasks(idVehicle)
-//    }
-
-    fun getTasks(idVehicle: Int): Flow<List<TaskItem>>{
-        return taskDao.getTasks(idVehicle)
-    }
-
-
 }

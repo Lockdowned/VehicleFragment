@@ -17,6 +17,7 @@ import com.example.vehiclefragment.viewmodels.TaskViewModel
 import com.example.vehiclefragment.viewmodels.TaskViewModelFactory
 import com.example.vehiclefragment.viewmodels.VehicleViewModel
 import com.example.vehiclefragment.viewmodels.VehicleViewModelFactory
+import kotlinx.coroutines.delay
 
 class MainActivity : AppCompatActivity(), IFragmentCommunication{
 
@@ -33,7 +34,7 @@ class MainActivity : AppCompatActivity(), IFragmentCommunication{
 
     private lateinit var binding: ActivityMainBinding
 
-    private var itemVehicleToEdit: VehicleItem? = null
+    private var chosenVehicleId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity(), IFragmentCommunication{
 
         listFragment = ListFragment(vehicleViewModel)
         createFragment = CreateFragment(vehicleViewModel)
-        editFragment = EditFragment(vehicleViewModel, taskViewModel)
+        editFragment = EditFragment(taskViewModel)
 
         supportFragmentManager.beginTransaction().apply {
             add(R.id.mainFragment, createFragment)
@@ -53,11 +54,11 @@ class MainActivity : AppCompatActivity(), IFragmentCommunication{
         setCurrentFragment(listFragment)
 
 
-        binding.mainMenu.setOnNavigationItemSelectedListener {
-            when(it.itemId){
+        binding.mainMenu.setOnNavigationItemSelectedListener { menuItem ->
+            when(menuItem.itemId){
                 R.id.miList -> {
-                    editFragment.fromEditChangeString?.let { textServ ->
-                        vehicleViewModel.getSelected()?.serviceInfo = textServ
+                    editFragment.chosenItemVehicle?.let {
+                        vehicleViewModel.update(it)
                     }
                     setCurrentFragment(listFragment)
                 }
@@ -66,7 +67,7 @@ class MainActivity : AppCompatActivity(), IFragmentCommunication{
                     setCurrentFragment(createFragment)
                 }
                 R.id.miEdit -> {
-                    itemVehicleToEdit?.let {
+                    chosenVehicleId?.let {
                         setCurrentFragment(editFragment)
                         return@setOnNavigationItemSelectedListener true
                     }
@@ -85,9 +86,9 @@ class MainActivity : AppCompatActivity(), IFragmentCommunication{
         }
     }
 
-    override fun toEdit(item: VehicleItem) {
-        itemVehicleToEdit = item
-        vehicleViewModel.select(item)
+    override fun toEdit(vehilceId : Int) {
+        chosenVehicleId = vehilceId
+        taskViewModel.chosenVehicleId = vehilceId
         binding.mainMenu.selectedItemId = R.id.miEdit
     }
 

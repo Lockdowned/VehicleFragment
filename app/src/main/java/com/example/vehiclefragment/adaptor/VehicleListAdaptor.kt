@@ -13,9 +13,7 @@ import com.example.vehiclefragment.viewmodels.VehicleViewModel
 class VehicleListAdaptor(
     private val vehicleViewModel: VehicleViewModel,
     private val context: IFragmentCommunication
-):
-//    RecyclerView.Adapter<VehicleListAdaptor.VehicleViewHolder>(){
-    ListAdapter<VehicleItem, VehicleListAdaptor.VehicleViewHolder>(VehicleComparator()) {
+): ListAdapter<VehicleItem, VehicleListAdaptor.VehicleViewHolder>(VehicleComparator()) {
 
     inner class VehicleViewHolder(val itemForListFragmentBinding: ItemForListFragmentBinding):
             RecyclerView.ViewHolder(itemForListFragmentBinding.root){
@@ -39,7 +37,7 @@ class VehicleListAdaptor(
         holder.bind(getItem(position))
         holder.itemView.setOnClickListener {
             val chosenVehicleItem = getItem(position)
-            context.toEdit(chosenVehicleItem)
+            context.toEdit(chosenVehicleItem.id!!)
         }
 
 
