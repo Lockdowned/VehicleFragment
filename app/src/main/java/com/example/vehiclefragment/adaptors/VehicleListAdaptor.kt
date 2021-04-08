@@ -25,7 +25,8 @@ class VehicleListAdaptor(
             itemForListFragmentBinding.textBrandsandModelItem.text = vehicleItem.brandAndModel
             itemForListFragmentBinding.textSpecificationItem.text = vehicleItem.specification
             itemForListFragmentBinding.textServInfItem.text = vehicleItem.serviceInfo
-            Glide.with(context).load(vehicleItem.img).into(itemForListFragmentBinding.imageVehicleItem)
+            vehicleItem.img?.let {
+                Glide.with(context).load(vehicleItem.img).into(itemForListFragmentBinding.imageVehicleItem) }
 //            itemForListFragmentBinding.imageVehicleItem.setImageDrawable(vehicleItem.img)
         }
     }
