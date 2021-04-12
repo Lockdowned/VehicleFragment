@@ -52,8 +52,7 @@ ListAdapter<TaskItem, TaskListAdaptor.TaskListHolder>(TaskComparator()){
             setPositiveButton("Yes"){ _,_ ->
                 taskViewModel.delete(taskItem.id!!)
             }
-            setNegativeButton("No"){ _,_ ->
-            }
+            setNegativeButton("No"){ _,_ -> }
         }
         val alertDialog = dialog.create()
         alertDialog.show()

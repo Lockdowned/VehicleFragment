@@ -5,7 +5,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import com.example.vehiclefragment.databinding.ActivityMainBinding
 import com.example.vehiclefragment.fragments.CreateFragment
 import com.example.vehiclefragment.fragments.EditFragment
@@ -15,8 +14,6 @@ import com.example.vehiclefragment.viewmodels.TaskViewModel
 import com.example.vehiclefragment.viewmodels.TaskViewModelFactory
 import com.example.vehiclefragment.viewmodels.VehicleViewModel
 import com.example.vehiclefragment.viewmodels.VehicleViewModelFactory
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), IFragmentCommunication{
 
@@ -56,10 +53,6 @@ class MainActivity : AppCompatActivity(), IFragmentCommunication{
             when(menuItem.itemId){
                 R.id.miList -> {
                     setCurrentFragment(listFragment)
-                    lifecycleScope.launch { // это не правильно, но нужно т.к. observer в ListFragment не обновляет адаптер почему??
-                        delay(500)
-                        listFragment.vehicleAdapter?.notifyDataSetChanged()
-                    }
                 }
                 R.id.miCreate -> {
                     createFragment = CreateFragment(vehicleViewModel)

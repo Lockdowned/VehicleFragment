@@ -30,6 +30,8 @@ class EditFragment(private val taskViewModel: TaskViewModel,
 
     private var taskListAdaptor: TaskListAdaptor? = null
 
+    private lateinit var textWatcherEditText: TextWatcher
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         localContext = context
@@ -50,12 +52,9 @@ class EditFragment(private val taskViewModel: TaskViewModel,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         taskViewModel.chosenVehicleId?.let {
             taskViewModel.setVehicleWithTasks(it)
         }
-
-//        chosenItemVehicle = taskViewModel.vehicleWithTasks?.value?.first()?.vehicle//ПОЧЕМУ null??
 
         binding.buttonAddTask.setOnClickListener {
             chosenItemVehicle!!.serviceInfo = binding.etServiceEditFragment.text.toString()
@@ -69,37 +68,45 @@ class EditFragment(private val taskViewModel: TaskViewModel,
                 binding.etTextTaskToAdd.setText("")
             }
         }
-    }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-
-        taskViewModel.vehicleWithTasks?.observe(viewLifecycleOwner, { // странное решение
-            if (chosenItemVehicle == null){
-                chosenItemVehicle = it.first().vehicle
-                binding.run {
-                    tvBrandTextEditFragment.text = chosenItemVehicle?.brandAndModel.plus("\n")
-                            .plus(chosenItemVehicle?.specification)
-                    etServiceEditFragment.setText(chosenItemVehicle?.serviceInfo)
-                    Glide.with(localContext).load(chosenItemVehicle?.img).into(binding.imageViewServicePage)
-                }
-            }
-            taskListAdaptor = TaskListAdaptor(it.first().tasks as MutableList<TaskItem>, taskViewModel)
-            binding.rvTaskList.adapter = taskListAdaptor
-            binding.rvTaskList.layoutManager = LinearLayoutManager(localContext)
-        })
-
-        binding.etTextTaskToAdd.setText("")
-
-        binding.etServiceEditFragment.addTextChangedListener(object: TextWatcher{
+        textWatcherEditText = object: TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(text: Editable?) { // почему editText хранит предыдущие значения(уже стёртые)
+            override fun afterTextChanged(text: Editable?) {
                 chosenItemVehicle?.let {
                     it.serviceInfo = text.toString()
                     vehicleViewModel.update(chosenItemVehicle!!)
                 }
             }
+        }
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+
+        taskViewModel.vehicleWithTasks?.observe(viewLifecycleOwner, { list -> // странное решение
+            if (chosenItemVehicle == null){
+                chosenItemVehicle = list.first().vehicle
+                binding.run {
+                    tvBrandTextEditFragment.text = chosenItemVehicle?.brandAndModel.plus("\n")
+                            .plus(chosenItemVehicle?.specification)
+                    etServiceEditFragment.setText(chosenItemVehicle?.serviceInfo)
+                    chosenItemVehicle?.img?.let {
+                        Glide.with(localContext).load(it).into(imageViewServicePage)
+                    }
+                }
+            }
+            taskListAdaptor = TaskListAdaptor(list.first().tasks as MutableList<TaskItem>, taskViewModel)
+            binding.rvTaskList.adapter = taskListAdaptor
+            binding.rvTaskList.layoutManager = LinearLayoutManager(localContext)
         })
+        binding.etTextTaskToAdd.setText("")
+
+        binding.etServiceEditFragment.addTextChangedListener(textWatcherEditText)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.etServiceEditFragment.removeTextChangedListener(textWatcherEditText)
     }
 }

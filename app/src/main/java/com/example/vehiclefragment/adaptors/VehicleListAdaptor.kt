@@ -59,8 +59,8 @@ class VehicleListAdaptor(
         override fun areContentsTheSame(oldItem: VehicleItem, newItem: VehicleItem): Boolean {
             return oldItem.brandAndModel == newItem.brandAndModel &&
                     oldItem.img == newItem.img &&
-                    oldItem.serviceInfo == oldItem.serviceInfo &&
-                    oldItem.specification == oldItem.specification
+                    oldItem.serviceInfo == newItem.serviceInfo &&
+                    oldItem.specification == newItem.specification
         }
 
     }
