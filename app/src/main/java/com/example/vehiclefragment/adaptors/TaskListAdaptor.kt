@@ -4,15 +4,15 @@ import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vehiclefragment.databinding.ItemForEditFragmentBinding
 import com.example.vehiclefragment.db.entities.TaskItem
 import com.example.vehiclefragment.viewmodels.TaskViewModel
 
-class TaskListAdaptor(private val list: MutableList<TaskItem>, private val taskViewModel: TaskViewModel):
-ListAdapter<TaskItem, TaskListAdaptor.TaskListHolder>(TaskComparator()){
+class TaskListAdaptor(
+        private val list: MutableList<TaskItem>,
+        private val taskViewModel: TaskViewModel):
+        RecyclerView.Adapter<TaskListAdaptor.TaskListHolder>() {
 
     private var context: Context? = null
 
@@ -61,20 +61,5 @@ ListAdapter<TaskItem, TaskListAdaptor.TaskListHolder>(TaskComparator()){
     override fun getItemCount(): Int {
         return list.size
     }
-
-
-
-
-    class TaskComparator: DiffUtil.ItemCallback<TaskItem>(){ // ясно что в моей реализации не нужно т.к. сюда передаются не обьекты liveData
-        override fun areItemsTheSame(oldItem: TaskItem, newItem: TaskItem): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: TaskItem, newItem: TaskItem): Boolean {
-            return oldItem.checkBox == newItem.checkBox &&
-                    oldItem.taskText == newItem.taskText
-        }
-    }
-
 }
 

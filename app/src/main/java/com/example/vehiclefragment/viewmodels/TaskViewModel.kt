@@ -2,7 +2,6 @@ package com.example.vehiclefragment.viewmodels
 
 import androidx.lifecycle.*
 import com.example.vehiclefragment.db.entities.TaskItem
-import com.example.vehiclefragment.db.entities.VehicleItem
 import com.example.vehiclefragment.db.entities.relations.VehicleWithTasks
 import com.example.vehiclefragment.repos.TaskRepository
 import kotlinx.coroutines.launch
@@ -10,8 +9,6 @@ import kotlinx.coroutines.launch
 class TaskViewModel(private val repository: TaskRepository): ViewModel() {
 
     var vehicleWithTasks: LiveData<List<VehicleWithTasks>>? = null
-
-    var chosenVehicleId: Int? = null
 
     fun setVehicleWithTasks(id: Int){
         getVehicleWithTasks(id)

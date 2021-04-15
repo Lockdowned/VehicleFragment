@@ -10,21 +10,12 @@ class VehicleViewModel(private val repository: VehicleRepositiry): ViewModel() {
 
     val allVehicle: LiveData<List<VehicleItem>> = repository.allVehicle.asLiveData()
 
-    private var selectedVehicle: VehicleItem? = null
-
+    var selectedIdVehicle: Int? = null
 
     fun insert(vehicle: VehicleItem) = viewModelScope.launch {
         repository.insert(vehicle)
     }
 
-
-    fun select(item: VehicleItem){
-        selectedVehicle = item
-    }
-
-    fun getSelected(): VehicleItem? {
-        return selectedVehicle
-    }
 
     fun update(vehicle: VehicleItem) = viewModelScope.launch {
         repository.update(vehicle)

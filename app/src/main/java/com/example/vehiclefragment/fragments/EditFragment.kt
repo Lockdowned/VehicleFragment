@@ -52,7 +52,7 @@ class EditFragment(private val taskViewModel: TaskViewModel,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        taskViewModel.chosenVehicleId?.let {
+        vehicleViewModel.selectedIdVehicle?.let {
             taskViewModel.setVehicleWithTasks(it)
         }
 

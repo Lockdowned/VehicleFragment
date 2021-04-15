@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.vehiclefragment.MainActivity
 import com.example.vehiclefragment.databinding.ItemForListFragmentBinding
 import com.example.vehiclefragment.db.entities.VehicleItem
 import com.example.vehiclefragment.interfaces.IFragmentCommunication
@@ -27,7 +26,6 @@ class VehicleListAdaptor(
             itemForListFragmentBinding.textServInfItem.text = vehicleItem.serviceInfo
             vehicleItem.img?.let {
                 Glide.with(context).load(vehicleItem.img).into(itemForListFragmentBinding.imageVehicleItem) }
-//            itemForListFragmentBinding.imageVehicleItem.setImageDrawable(vehicleItem.img)
         }
     }
 
@@ -41,11 +39,9 @@ class VehicleListAdaptor(
     override fun onBindViewHolder(holder: VehicleViewHolder, position: Int) {
         holder.bind(getItem(position))
         holder.itemView.setOnClickListener {
-            val chosenVehicleItem = getItem(position)
-            (context as IFragmentCommunication).toEdit(chosenVehicleItem.id!!)
+            vehicleViewModel.selectedIdVehicle = getItem(position).id
+            (context as IFragmentCommunication).toEdit()
         }
-
-
     }
 
 

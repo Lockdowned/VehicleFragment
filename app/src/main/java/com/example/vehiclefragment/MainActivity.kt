@@ -30,8 +30,6 @@ class MainActivity : AppCompatActivity(), IFragmentCommunication{
 
     private lateinit var binding: ActivityMainBinding
 
-    private var chosenVehicleId: Int? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -59,7 +57,7 @@ class MainActivity : AppCompatActivity(), IFragmentCommunication{
                     setCurrentFragment(createFragment)
                 }
                 R.id.miEdit -> {
-                    chosenVehicleId?.let {
+                    vehicleViewModel.selectedIdVehicle?.let {
                         setCurrentFragment(editFragment)
                         return@setOnNavigationItemSelectedListener true
                     }
@@ -78,9 +76,7 @@ class MainActivity : AppCompatActivity(), IFragmentCommunication{
         }
     }
 
-    override fun toEdit(vehicleId : Int) {
-        chosenVehicleId = vehicleId
-        taskViewModel.chosenVehicleId = vehicleId
+    override fun toEdit() {
         binding.mainMenu.selectedItemId = R.id.miEdit
     }
 
