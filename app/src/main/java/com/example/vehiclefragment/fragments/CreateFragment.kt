@@ -9,11 +9,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.example.vehiclefragment.R
 import com.example.vehiclefragment.db.entities.VehicleItem
 import com.example.vehiclefragment.databinding.FragmentCreateBinding
 import com.example.vehiclefragment.interfaces.IFragmentCommunication
 import com.example.vehiclefragment.viewmodels.VehicleViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 private const val SELECT_IMAGE_CLICK = 1
 
@@ -111,7 +117,7 @@ class CreateFragment(private val vehicleViewModel: VehicleViewModel) : Fragment(
                     newVehicle.specification = pickDataSpecificXml()
 
                     newVehicle.let {
-                        vehicleViewModel.insert(it)
+                        vehicleViewModel.insertRoom(it)
                         (localContext as IFragmentCommunication).toList()
                     }
                 }
