@@ -14,12 +14,11 @@ class VehicleRepositiry(private val vehicleDao: VehicleDao): CommonActionDatabas
         return vehicleDao.getAllSync()
     }
 
-    @WorkerThread
     override suspend fun insert(vehicleItem: VehicleItem) {
         vehicleDao.insert(vehicleItem)
     }
 
-    @WorkerThread
+
     override suspend fun update(vehicleItem: VehicleItem) {
         vehicleDao.update(vehicleItem)
     }

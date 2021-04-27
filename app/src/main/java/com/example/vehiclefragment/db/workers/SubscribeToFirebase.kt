@@ -24,18 +24,17 @@ class SubscribeToFirebase(
     private val firestoreRepos = (applicationContext as VehicleApplication).vehicleFirestoreRepository
 
     override fun doWork(): Result {
-    CoroutineScope(Dispatchers.IO).launch {
         val vehicleCollectionFirestore = Firebase.firestore.collection("vehicles")
         vehicleCollectionFirestore.addSnapshotListener { value, error ->
             error?.let {
                 Toast.makeText(applicationContext, it.message, Toast.LENGTH_LONG).show()
                 return@addSnapshotListener
             }
-            launch { // IMPORTANT QUESTION!!!!!!!!! WHY WITHOUT launch show message: Suspension functions can be called only within coroutine body
+            CoroutineScope(Dispatchers.IO).launch {
                 value?.let {
                     Log.d("HEY", "trigger snapshot")
-                    val roomList = roomRepos.getAllForSync() //suspend
-                    val actualList = firestoreRepos.getAllForSync() // suspend
+                    val roomList = roomRepos.getAllForSync()
+                    val actualList = firestoreRepos.getAllForSync()
                     for (doc in actualList){
                         val matcVehicle = roomList.find { it.id == doc.id}
                         if (matcVehicle == null){
@@ -49,7 +48,6 @@ class SubscribeToFirebase(
                 }
             }
         }
-    }
         return Result.success()
     }
 }
