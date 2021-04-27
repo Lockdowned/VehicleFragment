@@ -13,8 +13,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.tasks.await
+
 
 class SubscribeToFirebase(
         ctx: Context,
@@ -25,26 +24,32 @@ class SubscribeToFirebase(
     private val firestoreRepos = (applicationContext as VehicleApplication).vehicleFirestoreRepository
 
     override fun doWork(): Result {
+    CoroutineScope(Dispatchers.IO).launch {
         val vehicleCollectionFirestore = Firebase.firestore.collection("vehicles")
         vehicleCollectionFirestore.addSnapshotListener { value, error ->
             error?.let {
                 Toast.makeText(applicationContext, it.message, Toast.LENGTH_LONG).show()
                 return@addSnapshotListener
             }
-            value?.let {
-                Log.d("HEY", "i'm HERE")
-                CoroutineScope(Dispatchers.IO).launch{
-                    val roomList = roomRepos.getAllSync()
-                    val actualList = firestoreRepos.getAll()
+            launch { // IMPORTANT QUESTION!!!!!!!!! WHY WITHOUT launch show message: Suspension functions can be called only within coroutine body
+                value?.let {
+                    Log.d("HEY", "trigger snapshot")
+                    val roomList = roomRepos.getAllForSync() //suspend
+                    val actualList = firestoreRepos.getAllForSync() // suspend
                     for (doc in actualList){
                         val matcVehicle = roomList.find { it.id == doc.id}
                         if (matcVehicle == null){
                             roomRepos.insert(doc)
+                            Log.d("HEY", "insert")
+                        } else if (!matcVehicle.equals(doc)) {
+                            Log.d("HEY", "update")
+                            roomRepos.update(doc)
                         }
                     }
                 }
             }
         }
+    }
         return Result.success()
     }
 }

@@ -17,16 +17,15 @@ class SyncDatabaseWorker(
     private val firestoreRepos = (applicationContext as VehicleApplication).vehicleFirestoreRepository
 
     override fun doWork(): Result {
-        val roomList = roomRepos.getAllSync()
-        val firestoreList = firestoreRepos.getAll()
-        var job: Job? = null
+        val job = CoroutineScope(Dispatchers.IO).launch {
+            val roomList = roomRepos.getAllForSync()
+            val firestoreList = firestoreRepos.getAllForSync()
 
-        if (firestoreList.isEmpty()){
-            for (vehicle in roomList){
-                firestoreRepos.insert(vehicle)
-            }
-        } else {
-            job = CoroutineScope(Dispatchers.IO).launch {
+            if (firestoreList.isEmpty()){
+                for (vehicle in roomList){
+                    firestoreRepos.insert(vehicle)
+                }
+            } else {
                 for (remoteVehicle in firestoreList){
                     val matchVehicle = roomList.find { it.id == remoteVehicle.id}
                     if (matchVehicle == null) {
@@ -38,7 +37,7 @@ class SyncDatabaseWorker(
             }
         }
         runBlocking {
-            job?.join()
+            job.join()
         }
         return Result.success()
     }

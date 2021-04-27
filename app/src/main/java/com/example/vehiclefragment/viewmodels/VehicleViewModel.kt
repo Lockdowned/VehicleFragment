@@ -57,15 +57,13 @@ class VehicleViewModel(
 
     fun insertRoom(vehicle: VehicleItem) = viewModelScope.launch(Dispatchers.IO) {
         repositoryRoom.insert(vehicle)
-        repositoryFire.insert(repositoryRoom.getAllSync().last()) // так работает корректно
+        repositoryFire.insert(repositoryRoom.getAllForSync().last()) // так работает корректно
     }
 
-    fun insertFirestore(vehicle: VehicleItem) = viewModelScope.launch {
-        repositoryFire.insert(vehicle)
-    }
 
     fun update(vehicle: VehicleItem) = viewModelScope.launch {
         repositoryRoom.update(vehicle)
+        repositoryFire.update(vehicle)
     }
 }
 
