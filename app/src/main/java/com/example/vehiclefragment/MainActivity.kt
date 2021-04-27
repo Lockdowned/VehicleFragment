@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity(), IFragmentCommunication{
 
     private val vehicleViewModel: VehicleViewModel by viewModels{
         VehicleViewModelFactory(
+                application,
                 (application as VehicleApplication).vehicleRoomRepository,
                 (application as VehicleApplication).vehicleFirestoreRepository)
     }

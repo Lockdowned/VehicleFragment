@@ -9,6 +9,9 @@ interface VehicleDao {
     @Query("SELECT * FROM vehicle_table")
     fun getAllVehicle(): Flow<List<VehicleItem>>
 
+    @Query("SELECT * FROM vehicle_table")
+    fun getAllSync() : MutableList<VehicleItem>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vehicle: VehicleItem)
 

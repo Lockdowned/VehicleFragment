@@ -7,9 +7,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "vehicle_table")
 data class VehicleItem(
-        @ColumnInfo(name = "brand_and_model") var brandAndModel: String,
-        var specification: String,
-        @ColumnInfo(name = "service_info")var serviceInfo: String,
-        @ColumnInfo var img: String? = null,
+        @ColumnInfo(name = "brand_and_model") var brandAndModel: String = "",
+        var specification: String = "",
+        @ColumnInfo(name = "service_info")var serviceInfo: String = "",
+        @ColumnInfo var img: String? = "",
         @PrimaryKey(autoGenerate = true) val id: Int? = null
 )

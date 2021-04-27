@@ -92,7 +92,9 @@ class EditFragment(private val taskViewModel: TaskViewModel,
                             .plus(chosenItemVehicle?.specification)
                     etServiceEditFragment.setText(chosenItemVehicle?.serviceInfo)
                     chosenItemVehicle?.img?.let {
-                        Glide.with(localContext).load(it).into(imageViewServicePage)
+                        if(it.isNotEmpty()){
+                            Glide.with(localContext).load(it).into(imageViewServicePage)
+                        }
                     }
                 }
             }

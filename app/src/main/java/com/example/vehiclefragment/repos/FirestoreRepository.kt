@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.example.vehiclefragment.db.entities.VehicleItem
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -31,18 +32,15 @@ class FirestoreRepository {
 
     fun getAll(): List<VehicleItem> {
         val list = mutableListOf<VehicleItem>()
-
-        val job = CoroutineScope(Dispatchers.IO).launch {
-            val taskList = vehicleCollection.get().await()
-            for (document in taskList) {
+        val task = vehicleCollection.get().addOnSuccessListener { notDeserializedList ->
+            for (document in notDeserializedList) {
                 val vehicleItem = document.toObject<VehicleItem>()
                 list.add(vehicleItem)
             }
         }
         runBlocking {
-            job.join()
+            task.await()
         }
-//        job.join()
         return list
     }
 }

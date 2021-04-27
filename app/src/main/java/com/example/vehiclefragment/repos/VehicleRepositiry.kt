@@ -9,13 +9,15 @@ class VehicleRepositiry(private val vehicleDao: VehicleDao) {
 
     val allVehicle: Flow<List<VehicleItem>> = vehicleDao.getAllVehicle()
 
-    @Suppress("RedundantSuspendModifier")
+    fun getAllSync() : MutableList<VehicleItem> {
+        return vehicleDao.getAllSync()
+    }
+
     @WorkerThread
     suspend fun insert(vehicle: VehicleItem) {
         vehicleDao.insert(vehicle)
     }
 
-    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun update(vehicle: VehicleItem) {
         vehicleDao.update(vehicle)

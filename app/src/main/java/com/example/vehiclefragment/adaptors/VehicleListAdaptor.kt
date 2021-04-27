@@ -25,7 +25,10 @@ class VehicleListAdaptor(
             itemForListFragmentBinding.textSpecificationItem.text = vehicleItem.specification
             itemForListFragmentBinding.textServInfItem.text = vehicleItem.serviceInfo
             vehicleItem.img?.let {
-                Glide.with(context).load(vehicleItem.img).into(itemForListFragmentBinding.imageVehicleItem) }
+                if (it.isNotEmpty()){
+                    Glide.with(context).load(vehicleItem.img).
+                    into(itemForListFragmentBinding.imageVehicleItem) }
+                }
         }
     }
 
@@ -43,8 +46,6 @@ class VehicleListAdaptor(
             (context as IFragmentCommunication).toEdit()
         }
     }
-
-
 
 
     class VehicleComparator: DiffUtil.ItemCallback<VehicleItem>(){
