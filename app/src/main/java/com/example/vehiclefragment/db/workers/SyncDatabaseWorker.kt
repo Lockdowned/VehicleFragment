@@ -30,7 +30,7 @@ class SyncDatabaseWorker(
                     val matchVehicle = roomList.find { it.id == remoteVehicle.id}
                     if (matchVehicle == null) {
                         roomRepos.insert(remoteVehicle)
-                    } else {
+                    } else if(matchVehicle != remoteVehicle){
                         roomRepos.update(remoteVehicle)
                     }
                 }

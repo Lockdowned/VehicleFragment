@@ -40,7 +40,7 @@ class SubscribeToFirebase(
                         if (matcVehicle == null){
                             roomRepos.insert(doc)
                             Log.d("HEY", "insert")
-                        } else if (!matcVehicle.equals(doc)) {
+                        } else if (matcVehicle != doc) { // in kotlin equals, == for data classes are same
                             Log.d("HEY", "update")
                             roomRepos.update(doc)
                         }
