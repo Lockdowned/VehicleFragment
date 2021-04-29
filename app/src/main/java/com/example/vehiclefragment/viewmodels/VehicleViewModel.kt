@@ -31,13 +31,13 @@ class VehicleViewModel(
 
     var selectedIdVehicle: Int? = null
 
-    fun syncDatabases(workManager: WorkManager){
+    private fun syncDatabases(workManager: WorkManager){
         val firstSyncDatabases = OneTimeWorkRequestBuilder<SyncDatabaseWorker>()
-                .addTag("work")
+                .addTag("firstSync")
                 .build()
 
         val subscribeToFirebase = OneTimeWorkRequestBuilder<SubscribeToFirebase>()
-                .addTag("work")
+                .addTag("snapshotFirebase")
                 .build()
 
         workManager
@@ -53,6 +53,10 @@ class VehicleViewModel(
 //                Log.d("HEY", "Still alive, message: $value")
 //            }
 //        })
+    }
+
+    private fun uploadImages(){
+
     }
 
 
