@@ -14,6 +14,9 @@ import com.example.vehiclefragment.databinding.ItemForListFragmentBinding
 import com.example.vehiclefragment.db.entities.VehicleItem
 import com.example.vehiclefragment.interfaces.IFragmentCommunication
 import com.example.vehiclefragment.viewmodels.VehicleViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class VehicleListAdaptor(
     private val vehicleViewModel: VehicleViewModel,
@@ -29,9 +32,9 @@ class VehicleListAdaptor(
             itemForListFragmentBinding.textServInfItem.text = vehicleItem.serviceInfo
             if (vehicleItem.img != -1) {
                 val stringUriImg = vehicleViewModel.getImg(vehicleItem.img)
-                Log.d("HEY", "current img in vehicle adaptor : $stringUriImg")
                 Glide.with(context).load(stringUriImg).
                 into(itemForListFragmentBinding.imageVehicleItem)
+                Log.d("HEY", "current img in vehicle adaptor : $stringUriImg")
             }
         }
     }

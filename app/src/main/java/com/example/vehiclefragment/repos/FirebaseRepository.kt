@@ -19,7 +19,7 @@ class FirebaseRepository: CommonActionDatabases {
 
     private val vehicleCollection = Firebase.firestore.collection("vehicles")
 
-    private val imageRef = Firebase.storage.reference
+    val imageRef = Firebase.storage.reference
 
     override suspend fun insert(vehicleItem: VehicleItem){
         CoroutineScope(Dispatchers.IO).launch {
@@ -48,7 +48,7 @@ class FirebaseRepository: CommonActionDatabases {
         vehicleCollection.document(necessaryDoc.id).set(vehicleItem)
     }
 
-    suspend fun insertImgToCloud(fileName: String, currentFile: Uri) {
+    suspend fun insertImgToCloud(fileName: Int, currentFile: Uri) {
         try {
             imageRef.child("images/$fileName").putFile(currentFile).await()
             Log.d("HEY", "uploadImageToStorage successfully upload image ")

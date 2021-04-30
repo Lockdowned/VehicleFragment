@@ -139,9 +139,9 @@ class CreateFragment(private val vehicleViewModel: VehicleViewModel) : Fragment(
                     refId
                 )
                 vehicleViewModel.insertImg(newImg)
-//                if (imgUri != null) {
-//                    vehicleViewModel.insertImgToCloud("img$refId", imgUri)
-//                }
+                if (imgUri != null) {
+                    vehicleViewModel.insertImgToCloud(refId, imgUri)
+                }
             }
         }
     }

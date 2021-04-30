@@ -85,18 +85,19 @@ class EditFragment(private val taskViewModel: TaskViewModel,
         super.onViewStateRestored(savedInstanceState)
 
         taskViewModel.vehicleWithTasks?.observe(viewLifecycleOwner, { list -> // странное решение
-            if (chosenItemVehicle == null){
-                chosenItemVehicle = list.first().vehicle
+            if (chosenItemVehicle == null) chosenItemVehicle = list.first().vehicle
+            chosenItemVehicle?.let { itemVehicle ->
                 binding.run {
-                    tvBrandTextEditFragment.text = chosenItemVehicle?.brandAndModel.plus("\n")
-                            .plus(chosenItemVehicle?.specification)
-                    etServiceEditFragment.setText(chosenItemVehicle?.serviceInfo)
-                    if (chosenItemVehicle!!.img != -1) {
-                        Glide.with(localContext).load(vehicleViewModel.getImg(chosenItemVehicle!!.id!!)).
+                    tvBrandTextEditFragment.text = itemVehicle.brandAndModel.plus("\n")
+                            .plus(itemVehicle.specification)
+                    etServiceEditFragment.setText(itemVehicle.serviceInfo)
+                    if (itemVehicle.img != -1) {
+                        Glide.with(localContext).load(vehicleViewModel.getImg(itemVehicle.img)).
                         into(imageViewServicePage)
                     }
                 }
             }
+
             taskListAdaptor = TaskListAdaptor(list.first().tasks as MutableList<TaskItem>, taskViewModel)
             binding.rvTaskList.adapter = taskListAdaptor
             binding.rvTaskList.layoutManager = LinearLayoutManager(localContext)

@@ -31,22 +31,26 @@ class ListFragment(private val vehicleViewModel: VehicleViewModel) : Fragment(R.
         if (vehicleAdapter == null){
             vehicleAdapter = VehicleListAdaptor(vehicleViewModel, localContext)
         }
-
         
         fragment = view.findViewById<RecyclerView>(R.id.rvListFragment)
         fragment.adapter = vehicleAdapter
         fragment.layoutManager = LinearLayoutManager(localContext)
 
+        vehicleViewModel.allImages.observe(
+                viewLifecycleOwner,
+                Observer { imgesList ->
+                    vehicleViewModel.currentListImg = imgesList
+                    vehicleAdapter?.notifyDataSetChanged()
+                }
+        )
+
         vehicleViewModel.allVehicle.observe(
-            viewLifecycleOwner,
-            Observer { vehicle ->
-                vehicle?.let {
-                    vehicleViewModel.fillAllImages()
+                viewLifecycleOwner,
+                Observer { vehiclesList ->
+                    vehiclesList?.let {
                     vehicleAdapter?.submitList(it)
                 }
             }
         )
     }
-
-
 }

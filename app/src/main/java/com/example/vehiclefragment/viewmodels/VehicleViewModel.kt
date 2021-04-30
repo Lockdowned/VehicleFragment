@@ -27,22 +27,24 @@ class VehicleViewModel(
     var lastImg: String? = null
 
     val allVehicle: LiveData<List<VehicleItem>> = repositoryRoom.allVehicle.asLiveData()
+    val allImages: LiveData<List<ImagesItem>> = repositoryRoom.allImages.asLiveData()
+    var currentListImg: List<ImagesItem>? = null
 
     var selectedIdVehicle: Int? = null
 
-    var allImages: List<ImagesItem>? = null
+//    var allImages: List<ImagesItem>? = null
 
-    fun fillAllImages(){
-        var images: List<ImagesItem>? = null
-        val job = viewModelScope.launch(Dispatchers.IO) {
-            images = repositoryRoom.getAllImg()
-        }
-        runBlocking {
-            job.join()
-        }
-        Log.d("HEY", "lat list $images")
-        allImages = images
-    }
+//    fun fillAllImages(){
+//        var images: List<ImagesItem>? = null
+//        val job = viewModelScope.launch(Dispatchers.IO) {
+//            images = repositoryRoom.getAllImg()
+//        }
+//        runBlocking {
+//            job.join()
+//        }
+//        Log.d("HEY", "lat list $images")
+//        allImages = images
+//    }
 
     private fun workerDatabases(workManager: WorkManager){
         val firstSyncDatabases = OneTimeWorkRequestBuilder<SyncDatabaseWorker>()
@@ -68,12 +70,12 @@ class VehicleViewModel(
 //        })
     }
 
-    fun insertImgToCloud(fileName: String, currentFile: Uri) = CoroutineScope(Dispatchers.IO).launch {
+    fun insertImgToCloud(fileName: Int, currentFile: Uri) = CoroutineScope(Dispatchers.IO).launch {
         repositoryFire.insertImgToCloud(fileName, currentFile)
     }
 
     fun getImg(vehicleId: Int): String {
-        return allImages!!.find { it.id == vehicleId }?.imgVehicle ?: ""
+        return currentListImg?.find { it.id == vehicleId }?.imgVehicle ?: ""
     }
 
     fun insertImg(imagesItem: ImagesItem) = viewModelScope.launch(Dispatchers.IO){
