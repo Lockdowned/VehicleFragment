@@ -1,37 +1,50 @@
 package com.example.vehiclefragment.viewmodels
 
 import android.app.Application
+import android.net.Uri
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.*
 import androidx.work.*
+import com.example.vehiclefragment.db.entities.ImagesItem
 import com.example.vehiclefragment.repos.VehicleRepositiry
 import com.example.vehiclefragment.db.entities.VehicleItem
 import com.example.vehiclefragment.db.workers.SubscribeToFirebase
 import com.example.vehiclefragment.db.workers.SyncDatabaseWorker
-import com.example.vehiclefragment.interfaces.CommonActionDatabases
-import com.example.vehiclefragment.repos.FirestoreRepository
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import dalvik.annotation.TestTarget
+import com.example.vehiclefragment.repos.FirebaseRepository
 import kotlinx.coroutines.*
-import org.jetbrains.annotations.TestOnly
 import java.lang.IllegalArgumentException
 
 class VehicleViewModel(
         application: Application,
         private val repositoryRoom: VehicleRepositiry,
-        private val repositoryFire: FirestoreRepository ): AndroidViewModel(application) { // earlier ViewModel()
+        private val repositoryFire: FirebaseRepository ): AndroidViewModel(application) { // earlier ViewModel()
 
     init {
-        syncDatabases(WorkManager.getInstance(application))
+        workerDatabases(WorkManager.getInstance(application))
+
     }
+
+    var lastImg: String? = null
 
     val allVehicle: LiveData<List<VehicleItem>> = repositoryRoom.allVehicle.asLiveData()
 
     var selectedIdVehicle: Int? = null
 
-    private fun syncDatabases(workManager: WorkManager){
+    var allImages: List<ImagesItem>? = null
+
+    fun fillAllImages(){
+        var images: List<ImagesItem>? = null
+        val job = viewModelScope.launch(Dispatchers.IO) {
+            images = repositoryRoom.getAllImg()
+        }
+        runBlocking {
+            job.join()
+        }
+        Log.d("HEY", "lat list $images")
+        allImages = images
+    }
+
+    private fun workerDatabases(workManager: WorkManager){
         val firstSyncDatabases = OneTimeWorkRequestBuilder<SyncDatabaseWorker>()
                 .addTag("firstSync")
                 .build()
@@ -55,8 +68,16 @@ class VehicleViewModel(
 //        })
     }
 
-    private fun uploadImages(){
+    fun insertImgToCloud(fileName: String, currentFile: Uri) = CoroutineScope(Dispatchers.IO).launch {
+        repositoryFire.insertImgToCloud(fileName, currentFile)
+    }
 
+    fun getImg(vehicleId: Int): String {
+        return allImages!!.find { it.id == vehicleId }?.imgVehicle ?: ""
+    }
+
+    fun insertImg(imagesItem: ImagesItem) = viewModelScope.launch(Dispatchers.IO){
+        repositoryRoom.insertImg(imagesItem)
     }
 
 
@@ -75,7 +96,7 @@ class VehicleViewModel(
 class VehicleViewModelFactory(
         private val application: Application,
         private val repositoryRoom: VehicleRepositiry,
-        private val repositoryFire: FirestoreRepository): ViewModelProvider.Factory{
+        private val repositoryFire: FirebaseRepository): ViewModelProvider.Factory{
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(VehicleViewModel::class.java)){
             @Suppress("UNCHECKED_CAST")

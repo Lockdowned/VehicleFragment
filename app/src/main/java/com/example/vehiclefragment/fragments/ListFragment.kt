@@ -2,6 +2,7 @@ package com.example.vehiclefragment.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.lifecycle.Observer
@@ -40,6 +41,7 @@ class ListFragment(private val vehicleViewModel: VehicleViewModel) : Fragment(R.
             viewLifecycleOwner,
             Observer { vehicle ->
                 vehicle?.let {
+                    vehicleViewModel.fillAllImages()
                     vehicleAdapter?.submitList(it)
                 }
             }

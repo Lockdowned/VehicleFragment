@@ -1,12 +1,15 @@
 package com.example.vehiclefragment.adaptors
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Database
 import com.bumptech.glide.Glide
+
 import com.example.vehiclefragment.databinding.ItemForListFragmentBinding
 import com.example.vehiclefragment.db.entities.VehicleItem
 import com.example.vehiclefragment.interfaces.IFragmentCommunication
@@ -24,11 +27,12 @@ class VehicleListAdaptor(
             itemForListFragmentBinding.textBrandsandModelItem.text = vehicleItem.brandAndModel
             itemForListFragmentBinding.textSpecificationItem.text = vehicleItem.specification
             itemForListFragmentBinding.textServInfItem.text = vehicleItem.serviceInfo
-            vehicleItem.img?.let {
-                if (it.isNotEmpty()){
-                    Glide.with(context).load(vehicleItem.img).
-                    into(itemForListFragmentBinding.imageVehicleItem) }
-                }
+            if (vehicleItem.img != -1) {
+                val stringUriImg = vehicleViewModel.getImg(vehicleItem.img)
+                Log.d("HEY", "current img in vehicle adaptor : $stringUriImg")
+                Glide.with(context).load(stringUriImg).
+                into(itemForListFragmentBinding.imageVehicleItem)
+            }
         }
     }
 
@@ -50,7 +54,7 @@ class VehicleListAdaptor(
 
     class VehicleComparator: DiffUtil.ItemCallback<VehicleItem>(){
         override fun areItemsTheSame(oldItem: VehicleItem, newItem: VehicleItem): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem == newItem
         }
 
         override fun areContentsTheSame(oldItem: VehicleItem, newItem: VehicleItem): Boolean {

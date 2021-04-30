@@ -91,10 +91,9 @@ class EditFragment(private val taskViewModel: TaskViewModel,
                     tvBrandTextEditFragment.text = chosenItemVehicle?.brandAndModel.plus("\n")
                             .plus(chosenItemVehicle?.specification)
                     etServiceEditFragment.setText(chosenItemVehicle?.serviceInfo)
-                    chosenItemVehicle?.img?.let {
-                        if(it.isNotEmpty()){
-                            Glide.with(localContext).load(it).into(imageViewServicePage)
-                        }
+                    if (chosenItemVehicle!!.img != -1) {
+                        Glide.with(localContext).load(vehicleViewModel.getImg(chosenItemVehicle!!.id!!)).
+                        into(imageViewServicePage)
                     }
                 }
             }
