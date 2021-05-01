@@ -29,7 +29,7 @@ class VehicleRepositiry(
         vehicleDao.update(vehicleItem)
     }
 
-    suspend fun getAllImg(): MutableList<ImagesItem> {
+    fun getAllImg(): MutableList<ImagesItem> {
         return imgDao.getAllImg()
     }
 

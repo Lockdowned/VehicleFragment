@@ -24,8 +24,6 @@ class VehicleViewModel(
         workerDatabases(WorkManager.getInstance(application))
     }
 
-    var lastImg: String? = null
-
     val allVehicle: LiveData<List<VehicleItem>> = repositoryRoom.allVehicle.asLiveData()
     val allImages: LiveData<List<ImagesItem>> = repositoryRoom.allImages.asLiveData()
     var currentListImg: List<ImagesItem>? = null

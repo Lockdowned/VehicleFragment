@@ -2,7 +2,6 @@ package com.example.vehiclefragment.repos
 
 import android.util.Log
 import com.example.vehiclefragment.db.entities.TaskItem
-import com.example.vehiclefragment.db.entities.VehicleItem
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase

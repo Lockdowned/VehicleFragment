@@ -7,16 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Database
 import com.bumptech.glide.Glide
-
 import com.example.vehiclefragment.databinding.ItemForListFragmentBinding
 import com.example.vehiclefragment.db.entities.VehicleItem
 import com.example.vehiclefragment.interfaces.IFragmentCommunication
 import com.example.vehiclefragment.viewmodels.VehicleViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class VehicleListAdaptor(
     private val vehicleViewModel: VehicleViewModel,
@@ -66,6 +61,5 @@ class VehicleListAdaptor(
                     oldItem.serviceInfo == newItem.serviceInfo &&
                     oldItem.specification == newItem.specification
         }
-
     }
 }

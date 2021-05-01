@@ -1,11 +1,8 @@
 package com.example.vehiclefragment.db
 
 import android.content.Context
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
-import androidx.sqlite.db.SupportSQLiteOpenHelper
-import com.example.vehiclefragment.R
 import com.example.vehiclefragment.db.dao.ImagesDao
 import com.example.vehiclefragment.db.dao.TaskDao
 import com.example.vehiclefragment.db.dao.VehicleDao

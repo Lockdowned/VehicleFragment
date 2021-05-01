@@ -1,9 +1,7 @@
 package com.example.vehiclefragment.repos
 
-import androidx.annotation.WorkerThread
 import com.example.vehiclefragment.db.dao.TaskDao
 import com.example.vehiclefragment.db.entities.TaskItem
-import com.example.vehiclefragment.db.entities.VehicleItem
 import com.example.vehiclefragment.db.entities.relations.VehicleWithTasks
 import com.example.vehiclefragment.interfaces.CommonTaskActionDatabases
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +20,6 @@ class TaskRepository(private val taskDao: TaskDao): CommonTaskActionDatabases {
     override suspend fun insert(taskItem: TaskItem){
         taskDao.insert(taskItem)
     }
-
 
 
     override suspend fun update(taskItem: TaskItem){

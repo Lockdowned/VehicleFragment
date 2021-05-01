@@ -6,11 +6,8 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.vehiclefragment.db.entities.TaskItem
 import com.example.vehiclefragment.db.entities.relations.VehicleWithTasks
-import com.example.vehiclefragment.db.workers.SubscribeToFirebase
 import com.example.vehiclefragment.db.workers.SubscribeToFirebaseTask
-import com.example.vehiclefragment.db.workers.SyncDatabaseWorker
 import com.example.vehiclefragment.repos.FirebaseReposTask
-import com.example.vehiclefragment.repos.FirebaseRepository
 import com.example.vehiclefragment.repos.TaskRepository
 import kotlinx.coroutines.launch
 
