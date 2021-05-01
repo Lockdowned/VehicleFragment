@@ -24,7 +24,11 @@ class MainActivity : AppCompatActivity(), IFragmentCommunication{
                 (application as VehicleApplication).vehicleFirestoreRepository)
     }
     private val taskViewModel: TaskViewModel by viewModels {
-        TaskViewModelFactory((application as VehicleApplication).taskRepository)
+        TaskViewModelFactory(
+            application,
+            (application as VehicleApplication).taskRepository,
+            (application as VehicleApplication).taskFirestoreRepos
+        )
     }
 
     private lateinit var listFragment: ListFragment

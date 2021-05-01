@@ -50,7 +50,7 @@ class TaskListAdaptor(
         dialog.run{
             setMessage("Delete this task: ${taskItem.taskText} ?")
             setPositiveButton("Yes"){ _,_ ->
-                taskViewModel.delete(taskItem.id!!)
+                taskViewModel.delete(taskItem)
             }
             setNegativeButton("No"){ _,_ -> }
         }

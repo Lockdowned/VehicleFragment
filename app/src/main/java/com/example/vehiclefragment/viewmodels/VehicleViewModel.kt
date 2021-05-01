@@ -20,8 +20,8 @@ class VehicleViewModel(
         private val repositoryFire: FirebaseRepository ): AndroidViewModel(application) { // earlier ViewModel()
 
     init {
+        Log.d("HEY", "start")
         workerDatabases(WorkManager.getInstance(application))
-
     }
 
     var lastImg: String? = null
@@ -31,20 +31,6 @@ class VehicleViewModel(
     var currentListImg: List<ImagesItem>? = null
 
     var selectedIdVehicle: Int? = null
-
-//    var allImages: List<ImagesItem>? = null
-
-//    fun fillAllImages(){
-//        var images: List<ImagesItem>? = null
-//        val job = viewModelScope.launch(Dispatchers.IO) {
-//            images = repositoryRoom.getAllImg()
-//        }
-//        runBlocking {
-//            job.join()
-//        }
-//        Log.d("HEY", "lat list $images")
-//        allImages = images
-//    }
 
     private fun workerDatabases(workManager: WorkManager){
         val firstSyncDatabases = OneTimeWorkRequestBuilder<SyncDatabaseWorker>()

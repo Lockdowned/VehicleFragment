@@ -3,7 +3,7 @@ package com.example.vehiclefragment.repos
 import android.net.Uri
 import android.util.Log
 import com.example.vehiclefragment.db.entities.VehicleItem
-import com.example.vehiclefragment.interfaces.CommonActionDatabases
+import com.example.vehiclefragment.interfaces.CommonVehicleActionDatabases
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -11,10 +11,9 @@ import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 
-class FirebaseRepository: CommonActionDatabases {
+class FirebaseRepository: CommonVehicleActionDatabases {
     private val logTag = javaClass.name
 
     private val vehicleCollection = Firebase.firestore.collection("vehicles")
@@ -44,8 +43,10 @@ class FirebaseRepository: CommonActionDatabases {
     }
 
     override suspend fun update(vehicleItem: VehicleItem) {
-        val necessaryDoc = vehicleCollection.whereEqualTo("id", vehicleItem.id).get().await().first()
-        vehicleCollection.document(necessaryDoc.id).set(vehicleItem)
+        val necessaryDoc = vehicleCollection.whereEqualTo("id", vehicleItem.id).get().await()
+        if (!necessaryDoc.isEmpty) {
+            vehicleCollection.document(necessaryDoc.first().id).set(vehicleItem)
+        }
     }
 
     suspend fun insertImgToCloud(fileName: Int, currentFile: Uri) {

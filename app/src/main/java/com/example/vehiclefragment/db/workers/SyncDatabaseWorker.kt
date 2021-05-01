@@ -55,7 +55,7 @@ class SyncDatabaseWorker(
                 }
             }
         }
-        runBlocking {
+        runBlocking { // need try without blocking
             job.join()
         }
         return Result.success()

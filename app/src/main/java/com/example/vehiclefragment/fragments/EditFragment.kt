@@ -62,7 +62,7 @@ class EditFragment(private val taskViewModel: TaskViewModel,
                 val task = TaskItem(
                         false,
                         binding.etTextTaskToAdd.text.toString(),
-                        chosenItemVehicle?.id
+                        chosenItemVehicle?.id!!
                 )
                 taskViewModel.insertTask(task)
                 binding.etTextTaskToAdd.setText("")
@@ -85,15 +85,17 @@ class EditFragment(private val taskViewModel: TaskViewModel,
         super.onViewStateRestored(savedInstanceState)
 
         taskViewModel.vehicleWithTasks?.observe(viewLifecycleOwner, { list -> // странное решение
-            if (chosenItemVehicle == null) chosenItemVehicle = list.first().vehicle
-            chosenItemVehicle?.let { itemVehicle ->
-                binding.run {
-                    tvBrandTextEditFragment.text = itemVehicle.brandAndModel.plus("\n")
+            if (chosenItemVehicle == null) {
+                chosenItemVehicle = list.first().vehicle
+                chosenItemVehicle?.let { itemVehicle ->
+                    binding.run {
+                        tvBrandTextEditFragment.text = itemVehicle.brandAndModel.plus("\n")
                             .plus(itemVehicle.specification)
-                    etServiceEditFragment.setText(itemVehicle.serviceInfo)
-                    if (itemVehicle.img != -1) {
-                        Glide.with(localContext).load(vehicleViewModel.getImg(itemVehicle.img)).
-                        into(imageViewServicePage)
+                        etServiceEditFragment.setText(itemVehicle.serviceInfo)
+                        if (itemVehicle.img != -1) {
+                            Glide.with(localContext).load(vehicleViewModel.getImg(itemVehicle.img)).
+                            into(imageViewServicePage)
+                        }
                     }
                 }
             }

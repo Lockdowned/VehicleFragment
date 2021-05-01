@@ -1,12 +1,39 @@
 package com.example.vehiclefragment.viewmodels
 
+import android.app.Application
 import androidx.lifecycle.*
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.vehiclefragment.db.entities.TaskItem
 import com.example.vehiclefragment.db.entities.relations.VehicleWithTasks
+import com.example.vehiclefragment.db.workers.SubscribeToFirebase
+import com.example.vehiclefragment.db.workers.SubscribeToFirebaseTask
+import com.example.vehiclefragment.db.workers.SyncDatabaseWorker
+import com.example.vehiclefragment.repos.FirebaseReposTask
+import com.example.vehiclefragment.repos.FirebaseRepository
 import com.example.vehiclefragment.repos.TaskRepository
 import kotlinx.coroutines.launch
 
-class TaskViewModel(private val repository: TaskRepository): ViewModel() {
+class TaskViewModel(
+    application: Application,
+    private val repository: TaskRepository,
+    private val repositoryFire: FirebaseReposTask
+): AndroidViewModel(application) {
+
+    init {
+        workerDatabases(WorkManager.getInstance(application))
+    }
+
+    private fun workerDatabases(workManager: WorkManager){
+
+        val subscribeToFirebase = OneTimeWorkRequestBuilder<SubscribeToFirebaseTask>()
+            .addTag("snapshotFirebaseTask")
+            .build()
+
+        workManager
+            .beginWith(subscribeToFirebase)
+            .enqueue()
+    }
 
     var vehicleWithTasks: LiveData<List<VehicleWithTasks>>? = null
 
@@ -20,22 +47,28 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel() {
 
     fun insertTask(taskItem: TaskItem) = viewModelScope.launch {
         repository.insert(taskItem)
+        repositoryFire.insert(repository.getAllForSync().last())
     }
 
     fun update(taskItem: TaskItem) = viewModelScope.launch {
         repository.update(taskItem)
+        repositoryFire.update(taskItem)
     }
 
-    fun delete(taskId: Int) = viewModelScope.launch {
-        repository.delete(taskId)
+    fun delete(taskItem: TaskItem) = viewModelScope.launch {
+        repository.delete(taskItem)
     }
 
 }
 
-class TaskViewModelFactory(private val repository: TaskRepository): ViewModelProvider.Factory{
+class TaskViewModelFactory(
+    private val application: Application,
+    private val repository: TaskRepository,
+    private val repositoryFire: FirebaseReposTask
+    ): ViewModelProvider.Factory{
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")
-        return TaskViewModel(repository) as T
+        return TaskViewModel(application, repository, repositoryFire) as T
     }
 
 }

@@ -2,7 +2,7 @@ package com.example.vehiclefragment.interfaces
 
 import com.example.vehiclefragment.db.entities.VehicleItem
 
-interface CommonActionDatabases {
+interface CommonVehicleActionDatabases {
 
     suspend fun getAllForSync(): List<VehicleItem>
 

@@ -4,13 +4,13 @@ import com.example.vehiclefragment.db.dao.ImagesDao
 import com.example.vehiclefragment.db.dao.VehicleDao
 import com.example.vehiclefragment.db.entities.ImagesItem
 import com.example.vehiclefragment.db.entities.VehicleItem
-import com.example.vehiclefragment.interfaces.CommonActionDatabases
+import com.example.vehiclefragment.interfaces.CommonVehicleActionDatabases
 import kotlinx.coroutines.flow.Flow
 
 class VehicleRepositiry(
     private val vehicleDao: VehicleDao,
     private val imgDao: ImagesDao
-): CommonActionDatabases {
+): CommonVehicleActionDatabases {
 
     val allVehicle: Flow<List<VehicleItem>> = vehicleDao.getAllVehicle()
 

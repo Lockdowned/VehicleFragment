@@ -5,32 +5,31 @@ import com.example.vehiclefragment.db.dao.TaskDao
 import com.example.vehiclefragment.db.entities.TaskItem
 import com.example.vehiclefragment.db.entities.VehicleItem
 import com.example.vehiclefragment.db.entities.relations.VehicleWithTasks
+import com.example.vehiclefragment.interfaces.CommonTaskActionDatabases
 import kotlinx.coroutines.flow.Flow
 
-class TaskRepository(private val taskDao: TaskDao) {
+class TaskRepository(private val taskDao: TaskDao): CommonTaskActionDatabases {
 
-    @Suppress("RedundantSuspendModifier")
-    @WorkerThread
     suspend fun getVehicleWithTasks(id: Int): Flow<List<VehicleWithTasks>>{
         return taskDao.getVehicleWithTasks(id)
     }
 
-    @Suppress("RedundantSuspendModifier")
-    @WorkerThread
-    suspend fun insert(taskItem: TaskItem){
+    override suspend fun getAllForSync(): List<TaskItem> {
+        return taskDao.getAllSync()
+    }
+
+
+    override suspend fun insert(taskItem: TaskItem){
         taskDao.insert(taskItem)
     }
 
 
-    @Suppress("RedundantSuspendModifier")
-    @WorkerThread
-    suspend fun update(taskItem: TaskItem){
+
+    override suspend fun update(taskItem: TaskItem){
         taskDao.updateTask(taskItem)
     }
 
-    @Suppress("RedundantSuspendModifier")
-    @WorkerThread
-    suspend fun delete(taskId: Int){
-        taskDao.delete(taskId)
+    override suspend fun delete(taskItem: TaskItem){
+        taskDao.delete(taskItem)
     }
 }

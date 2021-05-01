@@ -2,11 +2,15 @@ package com.example.vehiclefragment.db.dao
 
 import androidx.room.*
 import com.example.vehiclefragment.db.entities.TaskItem
+import com.example.vehiclefragment.db.entities.VehicleItem
 import com.example.vehiclefragment.db.entities.relations.VehicleWithTasks
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDao {
+
+    @Query("SELECT * FROM task_table")
+    suspend fun getAllSync() : MutableList<TaskItem>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(task: TaskItem)
@@ -20,7 +24,7 @@ interface TaskDao {
     @Update
     suspend fun updateTask(task: TaskItem)
 
-    @Transaction
-    @Query("DELETE FROM task_table WHERE id = :taskId")
-    suspend fun delete(taskId: Int)
+
+    @Delete
+    suspend fun delete(taskItem: TaskItem)
 }
