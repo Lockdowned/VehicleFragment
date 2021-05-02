@@ -18,7 +18,7 @@ class SyncDatabaseWorker(
 
     override fun doWork(): Result {
         val job = CoroutineScope(Dispatchers.IO).launch {
-            val vehicleRoomList = vehicleRoomRepos.getAllForSync()
+            var vehicleRoomList = vehicleRoomRepos.getAllForSync()
             val firestoreList = firestoreRepos.getAllForSync()
             val imgRoomList = vehicleRoomRepos.getAllImg()
 
@@ -31,8 +31,10 @@ class SyncDatabaseWorker(
                     val matchVehicle = vehicleRoomList.find { it.id == remoteVehicle.id}
                     if (matchVehicle == null) {
                         vehicleRoomRepos.insert(remoteVehicle)
+                        vehicleRoomList = vehicleRoomRepos.getAllForSync()
                     } else if(matchVehicle != remoteVehicle){
                         vehicleRoomRepos.update(remoteVehicle)
+                        vehicleRoomList = vehicleRoomRepos.getAllForSync()
                     }
                 }
             }
@@ -46,10 +48,10 @@ class SyncDatabaseWorker(
                 val refId = vehicle.img
                 if (refId != -1 && imgRoomList.find { it.id == refId} == null){
                     val image = ImagesItem(
-                            listStringImg.get(vehicle.img)!!,
+                            listStringImg.get(refId)!!,
                             refId
                     )
-                   vehicleRoomRepos.insertImg(image)
+                    vehicleRoomRepos.insertImg(image)
                 }
             }
         }
@@ -58,5 +60,4 @@ class SyncDatabaseWorker(
         }
         return Result.success()
     }
-
 }

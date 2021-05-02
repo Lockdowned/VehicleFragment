@@ -8,7 +8,7 @@ import androidx.work.*
 import com.example.vehiclefragment.db.entities.ImagesItem
 import com.example.vehiclefragment.repos.VehicleRepositiry
 import com.example.vehiclefragment.db.entities.VehicleItem
-import com.example.vehiclefragment.db.workers.SubscribeToFirebase
+import com.example.vehiclefragment.db.workers.SubscribeToFirebaseVehicle
 import com.example.vehiclefragment.db.workers.SyncDatabaseWorker
 import com.example.vehiclefragment.repos.FirebaseRepository
 import kotlinx.coroutines.*
@@ -35,7 +35,7 @@ class VehicleViewModel(
                 .addTag("firstSync")
                 .build()
 
-        val subscribeToFirebase = OneTimeWorkRequestBuilder<SubscribeToFirebase>()
+        val subscribeToFirebase = OneTimeWorkRequestBuilder<SubscribeToFirebaseVehicle>()
                 .addTag("snapshotFirebase")
                 .build()
 

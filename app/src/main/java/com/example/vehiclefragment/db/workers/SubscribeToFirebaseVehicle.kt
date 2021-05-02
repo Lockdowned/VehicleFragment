@@ -6,14 +6,17 @@ import android.widget.Toast
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.vehiclefragment.VehicleApplication
+import com.example.vehiclefragment.db.entities.ImagesItem
+import com.example.vehiclefragment.db.entities.VehicleItem
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 
-class SubscribeToFirebase(
+class SubscribeToFirebaseVehicle(
         ctx: Context,
         params: WorkerParameters
 ) : Worker(ctx, params) {
@@ -31,21 +34,42 @@ class SubscribeToFirebase(
             CoroutineScope(Dispatchers.IO).launch {
                 value?.let {
                     Log.d("HEY", "trigger snapshot")
-                    val roomList = roomRepos.getAllForSync()
+                    val vehicleRoomList = roomRepos.getAllForSync()
                     val actualList = firestoreRepos.getAllForSync()
-                    for (doc in actualList){
-                        val matcVehicle = roomList.find { it.id == doc.id}
+
+                    for (vehicleRemote in actualList){
+                        val matcVehicle = vehicleRoomList.find { it.id == vehicleRemote.id}
                         if (matcVehicle == null){
-                            roomRepos.insert(doc)
+                            roomRepos.insert(vehicleRemote)
                             Log.d("HEY", "insert")
-                        } else if (matcVehicle != doc) { // in kotlin equals, == for data classes are same
+                            insertImg(vehicleRemote)
+                        } else if (matcVehicle != vehicleRemote) { // in kotlin equals, == for data classes are same
+                            roomRepos.update(vehicleRemote)
                             Log.d("HEY", "update")
-                            roomRepos.update(doc)
                         }
                     }
                 }
             }
         }
         return Result.success()
+    }
+
+    private suspend fun insertImg(vehicleItem: VehicleItem){
+        if (vehicleItem.img != -1) {
+            val imgId = vehicleItem.img
+            val imgRoomList = roomRepos.getAllImg()
+            val cloudImg = firestoreRepos.imageRef
+                    .child("images/").listAll().await()
+            val necessaryImg = cloudImg.items.find { it.name == imgId.toString() }?.downloadUrl?.await().toString()
+            Log.d("HEY", "necessaryImg: $necessaryImg" )
+            if (necessaryImg != "null" && imgRoomList.find { it.id == imgId } == null){
+                val image = ImagesItem(
+                        necessaryImg,
+                        imgId
+                )
+                roomRepos.insertImg(image)
+                Log.d("HEY", "Insert image in snapshot to room $image")
+            }
+        }
     }
 }
