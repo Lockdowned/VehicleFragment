@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.bumptech.glide.Glide
 import com.example.vehiclefragment.R
 import com.example.vehiclefragment.db.entities.VehicleItem
 import com.example.vehiclefragment.databinding.FragmentCreateBinding
@@ -124,7 +125,7 @@ class CreateFragment(private val vehicleViewModel: VehicleViewModel) : Fragment(
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == SELECT_IMAGE_CLICK) {
             data?.data.let { imgUri ->
-                binding.imageCreateNewVehicle.setImageURI(imgUri)
+                Glide.with(this).load(imgUri).into(binding.imageCreateNewVehicle) //other way without Glide?
                 val refId = vehicleViewModel.allVehicle.value?.size?.inc() ?: -1
                 newVehicle.img = refId
                 val newImg = ImagesItem(
