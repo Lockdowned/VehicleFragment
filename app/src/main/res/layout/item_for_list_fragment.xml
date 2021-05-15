@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imageVehicleItem"
         android:layout_width="207dp"
         android:layout_height="141dp"
@@ -14,6 +14,9 @@
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/for_attachment_picture"
         android:scaleType="centerCrop"
+
+        app:shapeAppearanceOverlay="@style/roundedImageView"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/constraintLayout5"
         app:layout_constraintHorizontal_bias="0.5"

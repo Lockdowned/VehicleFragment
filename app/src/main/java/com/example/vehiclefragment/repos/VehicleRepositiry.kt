@@ -1,23 +1,43 @@
 package com.example.vehiclefragment.repos
 
-import androidx.annotation.WorkerThread
+import com.example.vehiclefragment.db.dao.ImagesDao
 import com.example.vehiclefragment.db.dao.VehicleDao
+import com.example.vehiclefragment.db.entities.ImagesItem
 import com.example.vehiclefragment.db.entities.VehicleItem
+import com.example.vehiclefragment.interfaces.CommonVehicleActionDatabases
 import kotlinx.coroutines.flow.Flow
 
-class VehicleRepositiry(private val vehicleDao: VehicleDao) {
+class VehicleRepositiry(
+    private val vehicleDao: VehicleDao,
+    private val imgDao: ImagesDao
+): CommonVehicleActionDatabases {
 
     val allVehicle: Flow<List<VehicleItem>> = vehicleDao.getAllVehicle()
 
-    @Suppress("RedundantSuspendModifier")
-    @WorkerThread
-    suspend fun insert(vehicle: VehicleItem) {
-        vehicleDao.insert(vehicle)
+    val allImages: Flow<List<ImagesItem>> = imgDao.getAllImgLive()
+
+    override suspend fun getAllForSync(): MutableList<VehicleItem> {
+        return vehicleDao.getAllSync()
     }
 
-    @Suppress("RedundantSuspendModifier")
-    @WorkerThread
-    suspend fun update(vehicle: VehicleItem) {
-        vehicleDao.update(vehicle)
+    override suspend fun insert(vehicleItem: VehicleItem) {
+        vehicleDao.insert(vehicleItem)
+    }
+
+
+    override suspend fun update(vehicleItem: VehicleItem) {
+        vehicleDao.update(vehicleItem)
+    }
+
+    fun getAllImg(): MutableList<ImagesItem> {
+        return imgDao.getAllImg()
+    }
+
+    suspend fun insertImg(imagesItem: ImagesItem) {
+        imgDao.insert(imagesItem)
+    }
+
+    override suspend fun delete(vehicleItem: VehicleItem) {
+        TODO("Not yet implemented")
     }
 }

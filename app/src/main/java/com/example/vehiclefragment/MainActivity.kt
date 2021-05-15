@@ -18,10 +18,17 @@ import com.example.vehiclefragment.viewmodels.VehicleViewModelFactory
 class MainActivity : AppCompatActivity(), IFragmentCommunication{
 
     private val vehicleViewModel: VehicleViewModel by viewModels{
-        VehicleViewModelFactory((application as VehicleApplication).vehicleRepository)
+        VehicleViewModelFactory(
+                application,
+                (application as VehicleApplication).vehicleRoomRepository,
+                (application as VehicleApplication).vehicleFirestoreRepository)
     }
     private val taskViewModel: TaskViewModel by viewModels {
-        TaskViewModelFactory((application as VehicleApplication).taskRepository)
+        TaskViewModelFactory(
+            application,
+            (application as VehicleApplication).taskRepository,
+            (application as VehicleApplication).taskFirestoreRepos
+        )
     }
 
     private lateinit var listFragment: ListFragment

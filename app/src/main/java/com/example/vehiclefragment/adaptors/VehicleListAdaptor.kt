@@ -1,6 +1,7 @@
 package com.example.vehiclefragment.adaptors
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -24,8 +25,12 @@ class VehicleListAdaptor(
             itemForListFragmentBinding.textBrandsandModelItem.text = vehicleItem.brandAndModel
             itemForListFragmentBinding.textSpecificationItem.text = vehicleItem.specification
             itemForListFragmentBinding.textServInfItem.text = vehicleItem.serviceInfo
-            vehicleItem.img?.let {
-                Glide.with(context).load(vehicleItem.img).into(itemForListFragmentBinding.imageVehicleItem) }
+            if (vehicleItem.img != -1) {
+                val stringUriImg = vehicleViewModel.getImg(vehicleItem.img)
+                Glide.with(context).load(stringUriImg).
+                into(itemForListFragmentBinding.imageVehicleItem)
+                Log.d("HEY", "current img in vehicle adaptor : $stringUriImg")
+            }
         }
     }
 
@@ -45,11 +50,9 @@ class VehicleListAdaptor(
     }
 
 
-
-
     class VehicleComparator: DiffUtil.ItemCallback<VehicleItem>(){
         override fun areItemsTheSame(oldItem: VehicleItem, newItem: VehicleItem): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem == newItem
         }
 
         override fun areContentsTheSame(oldItem: VehicleItem, newItem: VehicleItem): Boolean {
@@ -58,6 +61,5 @@ class VehicleListAdaptor(
                     oldItem.serviceInfo == newItem.serviceInfo &&
                     oldItem.specification == newItem.specification
         }
-
     }
 }

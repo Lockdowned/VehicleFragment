@@ -9,9 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.bumptech.glide.Glide
 import com.example.vehiclefragment.R
 import com.example.vehiclefragment.db.entities.VehicleItem
 import com.example.vehiclefragment.databinding.FragmentCreateBinding
+import com.example.vehiclefragment.db.entities.ImagesItem
 import com.example.vehiclefragment.interfaces.IFragmentCommunication
 import com.example.vehiclefragment.viewmodels.VehicleViewModel
 
@@ -44,7 +46,7 @@ class CreateFragment(private val vehicleViewModel: VehicleViewModel) : Fragment(
         binding.run {
 
             imageCreateNewVehicle.setOnClickListener {
-                val intent = Intent(Intent.ACTION_PICK)
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                 intent.type = "image/*"
                 startActivityForResult(intent, SELECT_IMAGE_CLICK)
             }
@@ -111,7 +113,7 @@ class CreateFragment(private val vehicleViewModel: VehicleViewModel) : Fragment(
                     newVehicle.specification = pickDataSpecificXml()
 
                     newVehicle.let {
-                        vehicleViewModel.insert(it)
+                        vehicleViewModel.insertRoom(it)
                         (localContext as IFragmentCommunication).toList()
                     }
                 }
@@ -123,8 +125,17 @@ class CreateFragment(private val vehicleViewModel: VehicleViewModel) : Fragment(
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == SELECT_IMAGE_CLICK) {
             data?.data.let { imgUri ->
-                binding.imageCreateNewVehicle.setImageURI(imgUri)
-                newVehicle.img = imgUri.toString()
+                Glide.with(this).load(imgUri).into(binding.imageCreateNewVehicle) //other way without Glide?
+                val refId = vehicleViewModel.allVehicle.value?.size?.inc() ?: -1
+                newVehicle.img = refId
+                val newImg = ImagesItem(
+                    imgUri.toString(),
+                    refId
+                )
+                vehicleViewModel.insertImg(newImg)
+                if (imgUri != null) {
+                    vehicleViewModel.insertImgToCloud(refId, imgUri)
+                }
             }
         }
     }
@@ -149,7 +160,4 @@ class CreateFragment(private val vehicleViewModel: VehicleViewModel) : Fragment(
         }
         return specification
     }
-
-
-
 }
